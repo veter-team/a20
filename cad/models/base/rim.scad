@@ -48,8 +48,8 @@ module spoke(l, w, h1 = 5, h2 = 10)
 module half_rim(shaft_r)
 {
     mnt_surface_z = 34 / 2;
-    rr = 20;
-    h1 = 14;
+    rr = 22;
+    h1 = 11;
     
     difference()
     {
@@ -57,7 +57,7 @@ module half_rim(shaft_r)
 
         cylinder(r = rr, h = h1, $fn = 128);
         translate([0, 0, h1])
-        cylinder(r1 = rr, r2 = 26, h = half_rim_width - h1 + 0.1, $fn = 128);
+        cylinder(r1 = rr, r2 = 28, h = half_rim_width - h1 + 0.1, $fn = 128);
     }
 
     // Shaft holder
@@ -76,9 +76,9 @@ module half_rim(shaft_r)
         for(i = [0 : 360 / 6 : 360])
         {
             rotate([0, 0, i])
-            translate([9.53, 0, -tolerance])
-            cylinder(r = mount_hole_radius + tolerance / 2, 
-                     h = mnt_surface_z + 3 * tolerance, $fn = 16);
+            translate([9.53, 0, h1 + 1])
+            rotate([0, 180, 0])
+            mounting_hole(h1 + 2, true);
         }
     }
 
