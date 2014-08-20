@@ -16,7 +16,7 @@ all: for3dprint
 
 for3dprint: $(BASE_STLS)
 
-$(BASE_STLS) : $(SOURCES)
+$(BASE_STLS) : $(OUTDIR)/base/%.stl : $(INDIR)/base/%.scad
 	$(OPENSCAD) -o $@ $<
 
 clean: 
