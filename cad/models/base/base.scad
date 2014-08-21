@@ -11,7 +11,7 @@ module base1()
   echo("** Base y-size: ", base_y_size);
 
   // Allowed dimensions
-  %cube([297, 420, 2], center = true);
+  //%cube([297, 420, 2], center = true);
 }
 
 module base2()
