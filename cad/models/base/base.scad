@@ -12,6 +12,7 @@ module base1()
 
   // Allowed dimensions
   //%cube([297, 420, 2], center = true);
+  %cube([420, 297, 2], center = true);
 }
 
 module base2()

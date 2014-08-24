@@ -4,7 +4,8 @@ use <motor_holder.scad>
 use <motor.scad>
 use <shaft_hub.scad>
 use <shaft_coupling.scad>
-use <belt_gear_15.scad>
+//use <belt_gear_15.scad>
+use <belt_gear_10.scad>
 use <wheel_holder.scad>
 
 
@@ -18,48 +19,25 @@ module motor_with_holder()
 }
 
 
-module wheel_motor_block()
-{
-  rotate([180, 0, 0])
-  {
-    translate([shaft_coupling_l + wheel_holder_z_size + shaft_coupling_l + 13, 0, 0])
-    motor_with_holder();
-
-    translate([shaft_coupling_l + wheel_holder_z_size - shaft_coupling_l * 0.75 + 13, 0, shaft_shift])
-    rotate([0, 90, 0])
-    color("DarkGoldenrod")
-    shaft_coupling();
-
-    translate([16, 0, shaft_shift])
-    rotate([0, 90, 0])
-    color("LightGrey")
-    wheel_holder();
-
-    translate([15, 0, shaft_shift])
-    rotate([0, -90, 0])
-    color("Gainsboro")
-    belt_gear_15();
-
-    translate([-30, 0, 25.0 + motor_shaft_shift]) 
-    rotate([0, -90, 0])
-    wheel();
-  }
-}
-
 module wheel_block()
 {
   rotate([180, 0, 0])
   {
-      translate([16, 0, shaft_shift])
+      translate([0, 0, shaft_shift])
       rotate([0, 90, 0])
       color("LightGrey")
       wheel_holder();
 
-      translate([15, 0, shaft_shift])
-      rotate([0, -90, 0])
+      translate([wheel_holder_z_size + 1, 0, shaft_shift])
+      rotate([0, 90, 0])
       color("Gainsboro")
-      belt_gear_15();
+      belt_gear_10();
 
+      translate([wheel_holder_z_size + belt_gear_10_l + 2, 0, shaft_shift])
+      rotate([0, 90, 0])
+      color("LightGrey")
+      wheel_holder();
+      
       translate([-30, 0, 25.0 + motor_shaft_shift]) 
       rotate([0, -90, 0])
       wheel();
@@ -67,8 +45,26 @@ module wheel_block()
 }
 
 
+module wheel_motor_block()
+{
+
+    wheel_block();
+    rotate([180, 0, 0])
+    {
+        translate([2 * wheel_holder_z_size + belt_gear_15_l + 2 + 1, 0, shaft_shift])
+        rotate([0, 90, 0])
+        color("DarkGoldenrod")
+        shaft_coupling();
+
+        translate([2 * wheel_holder_z_size + belt_gear_15_l + 2 + shaft_coupling_l + 10, 0, 0])
+        motor_with_holder();
+    }
+}
+
+
+
 if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
-    wheel_block();
-    //wheel_motor_block();
+    //wheel_block();
+    wheel_motor_block();
 }

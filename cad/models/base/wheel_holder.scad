@@ -28,6 +28,7 @@ module wheel_holder_mounting_pad(mount_w, mount_h)
 module wheel_holder_base()
 {
   mount_w = (radial_bearing_r + wheel_holder_wall) * 2 + 20;
+  echo("** Mount width: ", mount_w);
 
   difference()
   {

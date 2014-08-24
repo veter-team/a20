@@ -9,7 +9,8 @@ tolerance = 0.4;
 base_radius = 280 / 2;
 base_z_size = 3;
 
-base_x_size = 297 - 17;//420 - 10;
+base_x_size = 420 - 10;
+//base_x_size = 297 - 17;
 base_y_size = 297 - 10;
 
 shaft_radius = 6 / 2 + tolerance / 2;
@@ -40,6 +41,12 @@ shaft_coupling_l = 16;
 
 belt_gear_15_r1 = 14;
 belt_gear_15_l1 = 14;
+belt_gear_15_l = 20;
+
+belt_gear_10_r1 = 23 / 2;
+belt_gear_10_r2 = 16 / 2;
+belt_gear_10_l1 = 14;
+belt_gear_10_l = 20;
 
 mount_hole_radius = 3 / 2 + tolerance / 2;
 

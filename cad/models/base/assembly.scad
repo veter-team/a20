@@ -5,23 +5,36 @@ use <wheel_motor_block.scad>
 use <base.scad>
 use <lead_battery.scad>
 use <tower.scad>
+use <belt.scad>
 include <main_dimensions.scad>
 
 explosion_distance = 3;
 
 module wheel_motor_placement()
 {
-  translate([-base_x_size / 2 + wheel_width, -base_y_size / 2 + wheel_radius, -base_z_size / 2])
+  translate([-base_x_size / 2 + wheel_width,
+          -(330.5 - 2 * 3.1415 * belt_gear_10_r2) / 2 / 2,
+          -base_z_size / 2])
   wheel_motor_block();
+
+  translate([-base_x_size / 2 + wheel_width + 0.5 * wheel_holder_z_size + belt_gear_10_l1 + 1,
+          -(330.5 - 2 * 3.1415 * belt_gear_10_r2) / 2 / 2,
+          -shaft_shift])
+  belt(330.5, belt_gear_10_r2);
 }
 
 
 module wheel_placement()
 {
-  translate([-base_x_size / 2 + wheel_width, base_y_size / 2 - wheel_radius, -base_z_size / 2])
+  //translate([-base_x_size / 2 + wheel_width, base_y_size / 2 - wheel_radius, -base_z_size / 2])
+  translate([-base_x_size / 2 + wheel_width, (330.5 - 3.1415 * 16) / 2 / 2, -base_z_size / 2])
   wheel_block();
+  echo("** Motor holder position: ", -base_x_size / 2 + wheel_width, base_y_size / 2 - wheel_radius);
+  // 82 - 15 = 67, 79.5
 }
 
+// Marker to visually check wheel holder position
+//translate([-82 + 15, 79.5, -55]) cube([1, 10, 10]);
 
 // Base platform
 base2();
@@ -44,12 +57,22 @@ wheel_motor_placement();
 mirror([1, 0, 0])
 mirror([0, 1, 0])
 wheel_motor_placement();
+/*
+// Passive wheels
+wheel_placement();
+mirror([1, 0, 0])
+wheel_placement();
 
+// Active wheels
+wheel_motor_placement();
+mirror([1, 0, 0])
+wheel_motor_placement();
+*/
 
 
 // ********************************************************
 // This is just a very first idea(s) regarding robot cover.
-
+/*
 module front_cover()
 {
     color("DimGray")
@@ -114,3 +137,4 @@ translate([-12, -155, 5])
 rotate([90, 0, 0])
 color("Silver")
 cylinder(r = 10, h = 20, center = true);
+*/
