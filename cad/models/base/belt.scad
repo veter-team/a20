@@ -41,5 +41,6 @@ module belt(total_length, gear_r)
 
 if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
-    belt(330.5, belt_gear_10_r2);
+    //belt(330.5, belt_gear_10_r2);
+    belt(330.5, belt_gear_15_r2);
 }

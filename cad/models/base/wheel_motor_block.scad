@@ -31,14 +31,14 @@ module wheel_block()
       translate([wheel_holder_z_size + 1, 0, shaft_shift])
       rotate([0, 90, 0])
       color("Gainsboro")
-      belt_gear_10();
+      belt_gear();
 
-      translate([wheel_holder_z_size + belt_gear_10_l + 2, 0, shaft_shift])
+      translate([wheel_holder_z_size + belt_gear_l + 2, 0, shaft_shift])
       rotate([0, 90, 0])
       color("LightGrey")
       wheel_holder();
       
-      translate([-30, 0, 25.0 + motor_shaft_shift]) 
+      translate([-wheel_width / 2 - 2, 0, 25.0 + motor_shaft_shift]) 
       rotate([0, -90, 0])
       wheel();
   }
@@ -51,12 +51,12 @@ module wheel_motor_block()
     wheel_block();
     rotate([180, 0, 0])
     {
-        translate([2 * wheel_holder_z_size + belt_gear_15_l + 2 + 1, 0, shaft_shift])
+        translate([2 * wheel_holder_z_size + belt_gear_l + 2 + 1, 0, shaft_shift])
         rotate([0, 90, 0])
         color("DarkGoldenrod")
         shaft_coupling();
 
-        translate([2 * wheel_holder_z_size + belt_gear_15_l + 2 + shaft_coupling_l + 10, 0, 0])
+        translate([2 * wheel_holder_z_size + belt_gear_l + 2 + shaft_coupling_l + 10, 0, 0])
         motor_with_holder();
     }
 }

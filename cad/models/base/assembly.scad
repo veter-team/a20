@@ -6,6 +6,7 @@ use <base.scad>
 use <lead_battery.scad>
 use <tower.scad>
 use <belt.scad>
+use <wheel_holder2.scad>
 include <main_dimensions.scad>
 
 explosion_distance = 3;
@@ -13,22 +14,24 @@ explosion_distance = 3;
 module wheel_motor_placement()
 {
   translate([-base_x_size / 2 + wheel_width,
-          -(330.5 - 2 * 3.1415 * belt_gear_10_r2) / 2 / 2,
+          -(330.5 - 2 * 3.1415 * belt_gear_r2) / 2 / 2,
           -base_z_size / 2])
-  wheel_motor_block();
+  rotate([0, 0, 90])
+  wheel_holder2();
 
-  translate([-base_x_size / 2 + wheel_width + 0.5 * wheel_holder_z_size + belt_gear_10_l1 + 1,
-          -(330.5 - 2 * 3.1415 * belt_gear_10_r2) / 2 / 2,
+  translate([-base_x_size / 2 + wheel_width + 0.5 * wheel_holder_z_size + belt_gear_l1 + 1,
+          -(330.5 - 2 * 3.1415 * belt_gear_r2) / 2 / 2,
           -shaft_shift])
-  belt(330.5, belt_gear_10_r2);
+  belt(330.5, belt_gear_r2);
 }
 
 
 module wheel_placement()
 {
   //translate([-base_x_size / 2 + wheel_width, base_y_size / 2 - wheel_radius, -base_z_size / 2])
-  translate([-base_x_size / 2 + wheel_width, (330.5 - 3.1415 * 16) / 2 / 2, -base_z_size / 2])
-  wheel_block();
+  translate([-base_x_size / 2 + wheel_width, (330.5 - 2 * 3.1415 * belt_gear_r2) / 2 / 2, -base_z_size / 2])
+  rotate([0, 0, -90])
+  wheel_holder2();
   echo("** Motor holder position: ", -base_x_size / 2 + wheel_width, base_y_size / 2 - wheel_radius);
   // 82 - 15 = 67, 79.5
 }
@@ -37,13 +40,13 @@ module wheel_placement()
 //translate([-82 + 15, 79.5, -55]) cube([1, 10, 10]);
 
 // Base platform
-base2();
+//base2();
 
-translate([0, 0, -(shaft_shift + belt_gear_15_r1 + 1 + wheel_holder_mount_h + base_z_size)])
+translate([0, 0, -(shaft_shift + belt_gear_r1 + 1 + wheel_holder_mount_h + base_z_size)])
 base1();
 
 // Battery
-translate([0, 0, -(shaft_shift + belt_gear_15_r1 + 1 + wheel_holder_mount_h + base_z_size / 2)])
+translate([0, 0, -(shaft_shift + belt_gear_r1 + 1 + wheel_holder_mount_h + base_z_size / 2)])
 lead_battery();
 
 // Passive wheels
