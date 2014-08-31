@@ -6,13 +6,12 @@ include <main_dimensions.scad>
 module base1()
 {
   color("BurlyWood")
-  roundedBox([base_x_size - wheel_width * 2, base_y_size, base_z_size], 10, true);
-  echo("** Base x-size: ", base_x_size - wheel_width * 2);
+  roundedBox([base_x_size, base_y_size, base_z_size], 3, true);
+  echo("** Base x-size: ", base_x_size);
   echo("** Base y-size: ", base_y_size);
 
-  // Allowed dimensions
-  //%cube([297, 420, 2], center = true);
-  %cube([420, 297, 2], center = true);
+// Allowed dimensions
+%cube([allowed_x_size, allowed_y_size, 2], center = true);
 }
 
 module base2()

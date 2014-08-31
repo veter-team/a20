@@ -12,7 +12,7 @@ use <wheel_holder.scad>
 module motor_with_holder()
 {
   motor_holder();
-    
+
   translate([1.5 * motor_holder_h, 0, 25.0]) 
   rotate([0, -90, 0]) 
   motor();
@@ -21,44 +21,33 @@ module motor_with_holder()
 
 module wheel_block()
 {
-  rotate([180, 0, 0])
-  {
-      translate([0, 0, shaft_shift])
-      rotate([0, 90, 0])
-      color("LightGrey")
-      wheel_holder();
+    color("Snow")
+    wheel_holder();
 
-      translate([wheel_holder_z_size + 1, 0, shaft_shift])
-      rotate([0, 90, 0])
-      color("Gainsboro")
-      belt_gear();
-
-      translate([wheel_holder_z_size + belt_gear_l + 2, 0, shaft_shift])
-      rotate([0, 90, 0])
-      color("LightGrey")
-      wheel_holder();
+    translate([0, belt_gear_l / 2, 0])
+    rotate([90, 0, 0])
+    color("Gainsboro")
+    belt_gear();
       
-      translate([-wheel_width / 2 - 2, 0, 25.0 + motor_shaft_shift]) 
-      rotate([0, -90, 0])
-      wheel();
-  }
+    translate([0, wheel_holder_y_dim / 2 + wheel_width / 2 + 2, 0]) 
+    rotate([90, 0, 0])
+    wheel();
 }
 
 
 module wheel_motor_block()
 {
-
     wheel_block();
-    rotate([180, 0, 0])
-    {
-        translate([2 * wheel_holder_z_size + belt_gear_l + 2 + 1, 0, shaft_shift])
-        rotate([0, 90, 0])
-        color("DarkGoldenrod")
-        shaft_coupling();
 
-        translate([2 * wheel_holder_z_size + belt_gear_l + 2 + shaft_coupling_l + 10, 0, 0])
-        motor_with_holder();
-    }
+    translate([0, -wheel_holder_y_dim / 2 - 1, 0])
+    rotate([90, 0, 0])
+    color("DarkGoldenrod")
+    shaft_coupling();
+
+    rotate([0, 0, -90])
+    rotate([-90, 0, 0])
+    translate([wheel_holder_y_dim / 2 + shaft_coupling_l + 10, 0, -shaft_shift])
+    motor_with_holder();
 }
 
 

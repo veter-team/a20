@@ -1,25 +1,23 @@
-include <main_dimensions.scad>
+// MMT-03 motor holder
+// http://www.lynxmotion.com/images/data/mmt-03.pdf
 
-// http://www.exp-tech.de/Zubehoer/Mechanisches-Bauteil/Pololu-37D-mm-Metall-Getriebemotor-Halterung-Paar.html
+include <main_dimensions.scad>
 
 $fn = 64;
 
-x_dim = 44;
-y_dim = 38;
-z_dim = 44;
 
-
-
-module holder_mounting_holes(depth = 50)
+module motor_holder_mounting_holes(depth = 50)
 {
-    translate([0, 0, 0])
-    cylinder(r = 5, h = depth, center = true);
-
-    for(i = [0 : 360 / 4 : 360])
+    translate([24, motor_holder_y_dim / 2, 0])
     {
-        rotate([0, 0, i])
-        translate([0, 10, 0])
-        cylinder(r = 3 / 2, h = depth, center = true);
+        cylinder(r = 3.9751, h = depth, center = true);
+
+        for(i = [0 : 360 / 4 : 360])
+        {
+            rotate([0, 0, i])
+            translate([0, 8.3312, 0])
+            cylinder(r = 1.1938, h = depth, center = true);
+        }
     }
 }
 
@@ -27,24 +25,24 @@ module holder_mounting_holes(depth = 50)
 module motor_holder()
 {
     color("Black")
-    translate([0, -y_dim / 2, 0])
+    translate([0, -motor_holder_y_dim / 2, 0])
     difference()
     {
         union()
         {
-            cube([x_dim - y_dim / 2, y_dim, z_dim - y_dim / 2]);
-            translate([x_dim - y_dim / 2, y_dim / 2, 0])
-            cylinder(r = y_dim / 2, h = z_dim - y_dim / 2);
+            cube([motor_holder_x_dim - motor_holder_y_dim / 2, motor_holder_y_dim, motor_holder_z_dim - motor_holder_y_dim / 2]);
+            translate([motor_holder_x_dim - motor_holder_y_dim / 2, motor_holder_y_dim / 2, 0])
+            cylinder(r = motor_holder_y_dim / 2, h = motor_holder_z_dim - motor_holder_y_dim / 2);
 
-            translate([0, y_dim / 2, z_dim - y_dim / 2])
+            translate([0, motor_holder_y_dim / 2, motor_holder_z_dim - motor_holder_y_dim / 2])
             rotate([0, 90, 0])
-            cylinder(r = y_dim / 2, h = x_dim - x_dim / 2);
+            cylinder(r = motor_holder_y_dim / 2, h = motor_holder_x_dim - motor_holder_x_dim / 2);
         }
         translate([motor_holder_h, -tolerance, motor_holder_h])
-        cube([x_dim, y_dim + 2 * tolerance, z_dim]);
+        cube([motor_holder_x_dim, motor_holder_y_dim + 2 * tolerance, motor_holder_z_dim]);
 
         // Shaft hole
-        translate([motor_holder_h / 2, y_dim / 2, 25.0])
+        translate([motor_holder_h / 2, motor_holder_y_dim / 2, 25.0])
         union()
         {
             translate([-motor_holder_h, 0, -14.3 / 2])
@@ -59,7 +57,7 @@ module motor_holder()
         }
 
         // Motor mounting holes
-        translate([motor_holder_h / 2, y_dim / 2, 25.0])
+        translate([motor_holder_h / 2, motor_holder_y_dim / 2, 25.0])
         for(i = [0 : 360 / 6 : 360])
         {
             rotate([i, 0, 0])
@@ -68,8 +66,7 @@ module motor_holder()
             cylinder(r = 3.3 / 2, h = 50, center = true);
         }
 
-        translate([x_dim - x_dim / 2, y_dim / 2, 0])
-        holder_mounting_holes(3 * motor_holder_h);
+        motor_holder_mounting_holes(3 * motor_holder_h);
     }
 }
 

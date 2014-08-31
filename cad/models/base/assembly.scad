@@ -6,47 +6,94 @@ use <base.scad>
 use <lead_battery.scad>
 use <tower.scad>
 use <belt.scad>
-use <wheel_holder2.scad>
+use <front_pannel.scad>
+use <screw_thread.scad>
+use <motor_holder.scad>
 include <main_dimensions.scad>
 
 explosion_distance = 3;
+distance_betwee_wheels = (330.5 - 2 * 3.1415 * belt_gear_r2) / 2 / 2;
 
 module wheel_motor_placement()
 {
-  translate([-base_x_size / 2 + wheel_width,
-          -(330.5 - 2 * 3.1415 * belt_gear_r2) / 2 / 2,
-          -base_z_size / 2])
-  rotate([0, 0, 90])
-  wheel_holder2();
+    
+  translate([base_x_size / 2 - wheel_holder_y_dim / 2,
+          -distance_betwee_wheels,
+          0])
+  rotate([0, 0, -90])
+  rotate([0, 180, 0])
+  wheel_motor_block();
 
-  translate([-base_x_size / 2 + wheel_width + 0.5 * wheel_holder_z_size + belt_gear_l1 + 1,
-          -(330.5 - 2 * 3.1415 * belt_gear_r2) / 2 / 2,
-          -shaft_shift])
+  translate([base_x_size / 2 - wheel_holder_y_dim / 2 + (belt_gear_l - belt_gear_l1) / 2,
+          -distance_betwee_wheels,
+          0])
+  rotate([0, 0, 0])
   belt(330.5, belt_gear_r2);
 }
 
 
 module wheel_placement()
 {
-  //translate([-base_x_size / 2 + wheel_width, base_y_size / 2 - wheel_radius, -base_z_size / 2])
-  translate([-base_x_size / 2 + wheel_width, (330.5 - 2 * 3.1415 * belt_gear_r2) / 2 / 2, -base_z_size / 2])
+  translate([base_x_size / 2 - wheel_holder_y_dim / 2,
+          distance_betwee_wheels,
+          0])
   rotate([0, 0, -90])
-  wheel_holder2();
-  echo("** Motor holder position: ", -base_x_size / 2 + wheel_width, base_y_size / 2 - wheel_radius);
-  // 82 - 15 = 67, 79.5
+  wheel_block();
 }
 
+
+module wheel_holder_mount_shaft()
+{
+    spring_length = 45;
+    
+    translate([base_x_size / 2 - wheel_holder_y_dim / 2, 0, wheel_holder_z_dim / 2])
+    rotate([90, 0, 0])
+    {
+        color("Silver")
+        cylinder(r = shaft_radius, h = base_y_size + 10, center = true, $fn = 32);
+
+        // Springs for belt tension
+        translate([0, 0, -spring_length / 2])
+        color("Silver")
+        spring(2, shaft_radius * 2 + 2, 1, spring_length, $fn = 32);
+    }
+}
+
+
+module front_pannel_with_motor_holes()
+{
+    color("Snow")
+    {
+        translate([0, distance_betwee_wheels + shaft_shift, 0])
+        {
+            difference()
+            {
+                front_pannel();
+                
+                // Holes for motor holder
+                translate([-(base_x_size / 2 - wheel_holder_y_dim - shaft_coupling_l - 10),
+                        0,
+                        -motor_holder_y_dim / 2,
+                        ])
+                rotate([90, 0, 0])
+                motor_holder_mounting_holes(front_pannel_h * 2);
+            }
+        }
+    }
+}
+    
 // Marker to visually check wheel holder position
 //translate([-82 + 15, 79.5, -55]) cube([1, 10, 10]);
 
 // Base platform
+//translate([0, 0, wheel_holder_z_dim / 2 + shaft_radius + 2 + base_z_size / 2 + 1])
 //base2();
 
-translate([0, 0, -(shaft_shift + belt_gear_r1 + 1 + wheel_holder_mount_h + base_z_size)])
+translate([0, 0, -wheel_holder_z_dim / 2 - shaft_radius - 2 - base_z_size / 2 - 1])
 base1();
 
 // Battery
-translate([0, 0, -(shaft_shift + belt_gear_r1 + 1 + wheel_holder_mount_h + base_z_size / 2)])
+translate([0, 0, -wheel_holder_z_dim / 2 - shaft_radius - 2 + base_z_size / 2])
 lead_battery();
 
 // Passive wheels
@@ -60,17 +107,24 @@ wheel_motor_placement();
 mirror([1, 0, 0])
 mirror([0, 1, 0])
 wheel_motor_placement();
-/*
-// Passive wheels
-wheel_placement();
-mirror([1, 0, 0])
-wheel_placement();
 
-// Active wheels
-wheel_motor_placement();
+// Wheel holder mounting shafts
+wheel_holder_mount_shaft();
 mirror([1, 0, 0])
-wheel_motor_placement();
-*/
+wheel_holder_mount_shaft();
+
+mirror([0, 0, 1])
+{
+    wheel_holder_mount_shaft();
+    mirror([1, 0, 0])
+    wheel_holder_mount_shaft();
+}
+
+// Front and rear pannels
+front_pannel_with_motor_holes();
+mirror([0, 1, 0])
+mirror([1, 0, 0])
+front_pannel_with_motor_holes();
 
 
 // ********************************************************

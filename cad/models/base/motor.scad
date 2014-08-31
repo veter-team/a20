@@ -11,26 +11,28 @@ module motor()
 
     // back shaft
     color("Silver")
-    translate([0, 0, -motor_l1 - motor_l2 - 3 - 10]) cylinder(h = 12, r = 2 / 2);
+    translate([0, 0, -motor_l1 - motor_l2 - 3 - 10])
+    cylinder(h = 12, r = 2 / 2);
     // back shaft holder
     color("LightGray")
-    translate([0, 0, -motor_l1 - motor_l2 - 3]) cylinder(h = 3, r = 9 / 2);
+    translate([0, 0, -motor_l1 - motor_l2 - 3], $fn = 64)
+    cylinder(h = 3, r = 9 / 2);
     // thin back part
     color("LightGray")
     translate([0, 0, -motor_l1 - motor_l2])
-    cylinder(h = motor_l2, r = motor_r2);
+    cylinder(h = motor_l2, r = motor_r2, $fn = 128);
     // thick front part
     color("Gray")
     translate([0, 0, -motor_l1])
-    cylinder(h = motor_l1, r = motor_r1);
+    cylinder(h = motor_l1, r = motor_r1, $fn = 128);
     translate([motor_shaft_shift, 0, 0])
     {
         // front shaft holder
         color("Gray")
-        cylinder(h = 6.5, r = 6);
+        cylinder(h = 6.5, r = 6, $fn = 64);
         // front shaft
         color("Silver")
-        cylinder(h = 22, r = 3);
+        cylinder(h = 22, r = 3, $fn = 64);
     }
 }
 
