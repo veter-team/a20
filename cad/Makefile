@@ -4,10 +4,10 @@ INDIR = models
 OUTDIR = for3dprint
 
 BASE_SOURCES = \
-	base/bearing_pad.scad \
 	base/motor_holder.scad \
 	base/rim.scad \
-	base/wheel_holder.scad
+	base/wheel_holder.scad \
+	base/front_pannel.scad
 
 SOURCES = $(BASE_SOURCES:%.scad=$(INDIR)/%.scad)
 BASE_STLS = $(BASE_SOURCES:%.scad=$(OUTDIR)/%.stl)
