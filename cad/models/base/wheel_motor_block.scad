@@ -32,6 +32,19 @@ module wheel_block()
     translate([0, wheel_holder_y_dim / 2 + wheel_width / 2 + 2, 0]) 
     rotate([90, 0, 0])
     wheel();
+
+    // Shaft. Length:
+    // half tire width
+    // half rim width
+    // 2mm distance between holder and wheel
+    // 7 + 1 = 8mm distance to motor shaft coupling
+    // 5mm tolerance
+    shaft_len = wheel_width / 2 + 11 + wheel_holder_y_dim + 2 + 8 + 5;
+    echo("** Wheel shaft length:", shaft_len);
+    translate([0, -wheel_holder_y_dim / 2 - 8, 0])
+    rotate([-90, 0, 0])
+    color("Silver")
+    cylinder(r = shaft_radius, h = shaft_len, $fn = 32);
 }
 
 
@@ -56,4 +69,12 @@ if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
     //wheel_block();
     wheel_motor_block();
+    /*
+    difference()
+    {
+        wheel_motor_block();
+        translate([0, -10, 0])
+        cube([100, 200, 100]);
+    }
+    */
 }

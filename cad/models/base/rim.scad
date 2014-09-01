@@ -1,6 +1,5 @@
 include <main_dimensions.scad>
 
-half_rim_width = 25;
 
 /*
 There are always different requirements or wishes regarding spokes

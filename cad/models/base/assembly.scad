@@ -45,12 +45,14 @@ module wheel_placement()
 module wheel_holder_mount_shaft()
 {
     spring_length = 45;
+    holder_shaft_length = base_y_size + 25 * 2;
     
     translate([base_x_size / 2 - wheel_holder_y_dim / 2, 0, wheel_holder_z_dim / 2])
     rotate([90, 0, 0])
     {
         color("Silver")
-        cylinder(r = shaft_radius, h = base_y_size + 10, center = true, $fn = 32);
+        cylinder(r = shaft_radius, h = holder_shaft_length, center = true, $fn = 32);
+        echo("** Wheel holder mount shaft length:", holder_shaft_length);
 
         // Springs for belt tension
         translate([0, 0, -spring_length / 2])

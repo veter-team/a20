@@ -18,6 +18,8 @@ shaft_radius = 6 / 2 + tolerance / 2;
 wheel_radius = 125 / 2;
 wheel_width = 65;
 
+half_rim_width = 25;
+
 hub_outer_radius = 25.4 / 2 + tolerance / 2;
 hub_inner_radius = 12 / 2 + tolerance / 2;
 hub_height1 = 5;
