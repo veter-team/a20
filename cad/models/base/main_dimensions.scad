@@ -73,7 +73,7 @@ akku_z_dim = 61;
 
 //base_x_size = allowed_x_size - wheel_width * 2 - 60;
 base_x_size = akku_x_dim + 2 * wheel_holder_y_dim + 6;
-base_y_size = ((330.5 - 2 * 3.1415 * belt_gear_r2) / 2 / 2 + shaft_shift) * 2 + front_pannel_h;
+base_y_size = ((330.5 - 2 * 3.1415 * belt_gear_r2) / 2 / 2 + shaft_shift) * 2 + front_pannel_h * 2;
 base_z_size = 3;
 
 holder_shaft_r = 5 / 2 + tolerance / 2;

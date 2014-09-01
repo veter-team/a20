@@ -64,7 +64,7 @@ module front_pannel_with_motor_holes()
 {
     color("Snow")
     {
-        translate([0, distance_betwee_wheels + shaft_shift, 0])
+        translate([0, distance_betwee_wheels + shaft_shift + front_pannel_h / 2, 0])
         {
             difference()
             {
