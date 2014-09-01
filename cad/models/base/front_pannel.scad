@@ -1,4 +1,5 @@
 use <MCAD/boxes.scad>
+use <motor_holder.scad>
 include <main_dimensions.scad>
 
 
