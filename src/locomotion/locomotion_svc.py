@@ -8,6 +8,7 @@ import MotorControl
 
 
 class DifferentialSteeringI(MotorControl.DifferentialSteering):
+
     def __init__(self, logger):
         self.logger = logger
 
