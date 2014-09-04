@@ -9,6 +9,49 @@ use <belt_gear_10.scad>
 use <wheel_holder.scad>
 
 
+module wheel_shaft()
+{
+    // Shaft. Length:
+    // half tire width
+    // half rim width
+    // 2mm distance between holder and wheel
+    // 7 + 1 = 8mm distance to motor shaft coupling
+    // 5mm tolerance
+    shaft_len = wheel_width / 2 + 11 + wheel_holder_y_dim + 2 + 8 + 5;
+    echo("** Wheel shaft length:", shaft_len);
+    pad_h = 0.5; // height for shaft pads to prevent hubs from sliping
+
+    difference()
+    {
+        rotate([-90, 0, 0])
+        color("Silver")
+        cylinder(r = shaft_radius, h = shaft_len, $fn = 32);
+
+        // Shaft pads
+        translate([-shaft_radius, 0, shaft_radius - pad_h])
+        {
+            // Shaft coupling
+            cube([2 * shaft_radius, shaft_coupling_l / 2, pad_h * 2]);
+            echo("** Wheel shaft pad 1:", 0, shaft_coupling_l / 2);
+
+            // Belt gear
+            translate([0, shaft_coupling_l / 2 + radial_bearing_h + 1 + 2, 0])
+            cube([2 * shaft_radius, belt_gear_l - belt_gear_l1, pad_h * 2]);
+            echo("** Wheel shaft pad 2:",
+                shaft_coupling_l / 2 + radial_bearing_h + 1 + 2,
+                belt_gear_l - belt_gear_l1);
+
+            // Outer part
+            translate([0, shaft_coupling_l / 2 + wheel_holder_y_dim + 1, 0])
+            cube([2 * shaft_radius, shaft_len - (shaft_coupling_l / 2 + wheel_holder_y_dim + 1) + 0.1, pad_h * 2]);
+            echo("** Wheel shaft pad 3:",
+                shaft_coupling_l / 2 + wheel_holder_y_dim + 1,
+                shaft_len - (shaft_coupling_l / 2 + wheel_holder_y_dim + 1));
+        }
+    }
+}
+
+
 module motor_with_holder()
 {
   motor_holder();
@@ -21,30 +64,28 @@ module motor_with_holder()
 
 module wheel_block()
 {
-    color("Snow")
-    wheel_holder();
+    difference()
+    {
+        union()
+        {
+            color("Snow")
+            wheel_holder();
+        
+            translate([0, belt_gear_l / 2, 0])
+            rotate([90, 0, 0])
+            color("Gainsboro")
+            belt_gear();
+              
+            translate([0, wheel_holder_y_dim / 2 + wheel_width / 2 + 2, 0]) 
+            rotate([90, 0, 0])
+            wheel();
+        }
+        translate([0, -10, 0])
+        cube([100, 200, 100]);
+    }
 
-    translate([0, belt_gear_l / 2, 0])
-    rotate([90, 0, 0])
-    color("Gainsboro")
-    belt_gear();
-      
-    translate([0, wheel_holder_y_dim / 2 + wheel_width / 2 + 2, 0]) 
-    rotate([90, 0, 0])
-    wheel();
-
-    // Shaft. Length:
-    // half tire width
-    // half rim width
-    // 2mm distance between holder and wheel
-    // 7 + 1 = 8mm distance to motor shaft coupling
-    // 5mm tolerance
-    shaft_len = wheel_width / 2 + 11 + wheel_holder_y_dim + 2 + 8 + 5;
-    echo("** Wheel shaft length:", shaft_len);
     translate([0, -wheel_holder_y_dim / 2 - 8, 0])
-    rotate([-90, 0, 0])
-    color("Silver")
-    cylinder(r = shaft_radius, h = shaft_len, $fn = 32);
+    wheel_shaft();
 }
 
 
@@ -69,6 +110,7 @@ if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
     //wheel_block();
     wheel_motor_block();
+    //wheel_shaft();
     /*
     difference()
     {
