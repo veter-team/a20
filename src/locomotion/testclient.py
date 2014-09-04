@@ -34,7 +34,7 @@ class Client(Ice.Application):
                 if c != '' and len(lst) != 2:
                     print('Parsing error')
                 else:
-                    diffdrive.setMotors(lst[0], lst[1])
+                    diffdrive.setMotorsWithTurn(lst[0], lst[1])
 
             except KeyboardInterrupt:
                 break
