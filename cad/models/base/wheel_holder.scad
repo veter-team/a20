@@ -1,5 +1,5 @@
-use <MCAD/boxes.scad>
-include <main_dimensions.scad>
+use <../MCAD/boxes.scad>
+include <../main_dimensions.scad>
 
 
 module wheel_holder()

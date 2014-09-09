@@ -1,5 +1,5 @@
-use <MCAD/regular_shapes.scad>
-include <main_dimensions.scad>
+use <../MCAD/regular_shapes.scad>
+include <../main_dimensions.scad>
 
 
 module tire()

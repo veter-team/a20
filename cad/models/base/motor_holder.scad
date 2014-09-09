@@ -1,7 +1,7 @@
 // MMT-03 motor holder
 // http://www.lynxmotion.com/images/data/mmt-03.pdf
 
-include <main_dimensions.scad>
+include <../main_dimensions.scad>
 
 $fn = 64;
 

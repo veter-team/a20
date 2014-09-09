@@ -1,4 +1,4 @@
-include <main_dimensions.scad>
+include <../main_dimensions.scad>
 use <tire.scad>
 use <rim.scad>
 

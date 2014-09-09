@@ -1,4 +1,4 @@
-include <main_dimensions.scad>
+include <../main_dimensions.scad>
 use <wheel.scad>
 use <motor_holder.scad>
 use <motor.scad>

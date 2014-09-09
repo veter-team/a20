@@ -1,6 +1,6 @@
-use <MCAD/boxes.scad>
+use <../MCAD/boxes.scad>
 use <lead_battery.scad>
-include <main_dimensions.scad>
+include <../main_dimensions.scad>
 
 
 module base1()

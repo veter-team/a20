@@ -1,6 +1,6 @@
-use <MCAD/boxes.scad>
+use <../MCAD/boxes.scad>
 use <motor_holder.scad>
-include <main_dimensions.scad>
+include <../main_dimensions.scad>
 
 
 module wheel_holder_shaft_hole()

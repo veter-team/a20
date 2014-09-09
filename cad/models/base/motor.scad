@@ -1,4 +1,4 @@
-include <main_dimensions.scad>
+include <../main_dimensions.scad>
 
 // http://www.pololu.com/product/1442
 

@@ -1,5 +1,5 @@
-use <MCAD/boxes.scad>
-include <main_dimensions.scad>
+use <../MCAD/boxes.scad>
+include <../main_dimensions.scad>
 
 
 // Raspberry Pi camera revision 1.3
