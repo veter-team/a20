@@ -9,9 +9,9 @@ ASSEMBLY = 1;
 include <../main_dimensions.scad>
 use <../MCAD/boxes.scad>
 use <../base/base.scad>
-use <md22.scad>
-use <srf08holder.scad>
-use <rcreceiver.scad>
+use <../parts/md22.scad>
+use <../parts/srf08holder.scad>
+use <../parts/rcreceiver.scad>
 
 mounting_hole_x_dist = 58;
 mounting_hole_y_dist = 49;
