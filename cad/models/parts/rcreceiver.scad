@@ -5,7 +5,7 @@ use <../MCAD/boxes.scad>
 include <../main_dimensions.scad>
 
 
-rcv_dim = [40, 60, 15];
+rcv_dim = [40, 30, 15];
 
 
 module rcreceiver()
@@ -19,11 +19,11 @@ module rcreceiver()
         
         // Connector pocket
         translate([rcv_dim[0] - 13, 5, rcv_dim[2] / 2])
-        cube([10, rcv_dim[1] - 20, rcv_dim[2]]);
+        cube([10, rcv_dim[1] - 2 * 5, rcv_dim[2]]);
     }
 
     // Connector pins
-    for(y = [10 : 5 : 10 + 6 * 5])
+    for(y = [7 : 2.5 : 7 + 6 * 2.5])
     {
         for(x = [rcv_dim[0] - 11 : 3 : rcv_dim[0] - 13 + 3 * 3])
         {

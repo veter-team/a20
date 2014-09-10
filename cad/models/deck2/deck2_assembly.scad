@@ -12,6 +12,7 @@ use <../base/base.scad>
 use <../parts/md22.scad>
 use <../parts/srf08holder.scad>
 use <../parts/rcreceiver.scad>
+use <../parts/rpicamera.scad>
 
 mounting_hole_x_dist = 58;
 mounting_hole_y_dist = 49;
@@ -72,7 +73,9 @@ module deck2_assembly()
 {
     rcv_pos = [-100, -100, 3];
     rcv_rot = [0, 0, 0];
-
+    cam_pos = [0, 0, 50];
+    cam_rot = [90, 0, 0];
+    
     difference()
     {
         base2();
@@ -87,6 +90,11 @@ module deck2_assembly()
     translate(rcv_pos)
     rotate(rcv_rot)
     rcreceiver();
+
+    // RPi camera
+    translate(cam_pos)
+    rotate(cam_rot)
+    rpicamera();
 }
 
 
