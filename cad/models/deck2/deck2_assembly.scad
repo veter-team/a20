@@ -21,10 +21,10 @@ rpi_y_dim = mounting_hole_y_dist + 2 * 3.5;
 mounting_hole_r = 2.75 / 2;
 
 
-module rpi()
+module rpi(parts_dir)
 {
     translate([54, -42.4, 0])
-    import("../parts/B+_Model_v4.stl", convexity = 3);
+    import(str(parts_dir, "/B+_Model_v4.stl"), convexity = 3);
 
     // Mounting holes
     // top-left
@@ -42,7 +42,7 @@ module rpi()
 }
 
 
-module units_placement()
+module units_placement(parts_dir)
 {
     rpi_pos = [100, 40, 2];
     rpi_rot = [0, 0, 0];
@@ -55,7 +55,7 @@ module units_placement()
     translate(rpi_pos)
     rotate(rpi_rot)
     color("SeaGreen")
-    rpi();
+    rpi(parts_dir);
 
     // Sonar with holder
     translate(srf08_pos)
@@ -69,7 +69,7 @@ module units_placement()
 }
 
 
-module deck2_assembly()
+module deck2_assembly(parts_dir)
 {
     rcv_pos = [-100, -100, 3];
     rcv_rot = [0, 0, 0];
@@ -80,11 +80,11 @@ module deck2_assembly()
     {
         base2();
         // Cut mounting holes
-        units_placement();
+        units_placement(parts_dir);
     }
 
     // Visualize units
-    units_placement();
+    units_placement(parts_dir);
 
     // RC receiver
     translate(rcv_pos)
@@ -98,4 +98,4 @@ module deck2_assembly()
 }
 
 
-deck2_assembly();
+deck2_assembly("../parts");

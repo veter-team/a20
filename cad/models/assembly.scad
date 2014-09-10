@@ -9,4 +9,4 @@ base_assembly();
 
 // Deck 2 with electronic
 translate([0, 0, 50])
-deck2_assembly();
+deck2_assembly("parts");
