@@ -1,3 +1,12 @@
+ASSEMBLY = 1;
+
 use <base/base_assembly.scad>
 use <deck2/deck2_assembly.scad>
 
+
+// Chassis and deck1
+base_assembly();
+
+// Deck 2 with electronic
+translate([0, 0, 50])
+deck2_assembly();

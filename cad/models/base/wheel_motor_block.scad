@@ -64,24 +64,19 @@ module motor_with_holder()
 
 module wheel_block()
 {
-    difference()
+    union()
     {
-        union()
-        {
-            color("Snow")
-            wheel_holder();
+        color("Snow")
+        wheel_holder();
         
-            translate([0, belt_gear_l / 2, 0])
-            rotate([90, 0, 0])
-            color("Gainsboro")
-            belt_gear();
+        translate([0, belt_gear_l / 2, 0])
+        rotate([90, 0, 0])
+        color("Gainsboro")
+        belt_gear();
               
-            translate([0, wheel_holder_y_dim / 2 + wheel_width / 2 + 2, 0]) 
-            rotate([90, 0, 0])
-            wheel();
-        }
-        translate([0, -10, 0])
-        cube([100, 200, 100]);
+        translate([0, wheel_holder_y_dim / 2 + wheel_width / 2 + 2, 0]) 
+        rotate([90, 0, 0])
+        wheel();
     }
 
     translate([0, -wheel_holder_y_dim / 2 - 8, 0])

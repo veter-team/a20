@@ -67,8 +67,8 @@ module md22_mounting_holes()
     {
         for(y = [m_h_r + 2, md22_dim[1] - m_h_r - 2])
         {
-            translate([x, y, -50])
-            cylinder(r = m_h_r, h = 100, $fn = 32);
+            translate([x, y, -20])
+            cylinder(r = m_h_r, h = 40, $fn = 32);
         }
     }
 }
@@ -81,6 +81,9 @@ module md22()
         md22_base();
         md22_mounting_holes();
     }
+
+    color("DarkGreen")
+    md22_mounting_holes();
 }
 
 

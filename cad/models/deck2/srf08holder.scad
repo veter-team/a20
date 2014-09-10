@@ -61,8 +61,9 @@ module holder_base()
 }
 
 
-module srf08holder()
+module srf08holder(show_sonar = false)
 {
+    color("Snow")
     difference()
     {
         holder_base();
@@ -83,9 +84,20 @@ module srf08holder()
         
     }
     
+    if(show_sonar)
+    {
+        translate([0, 15, board_z_dim / 2 + 3 / 2 + electronic_height])
+        rotate([180, 0, 0])
+        rotate([0, 0, 180])
+        color("Gainsboro")
+        srf08();
+    }
 }
 
 
-srf08holder();
-//srf08();
-//holder_base();
+if(ASSEMBLY == undef || ASSEMBLY == 0)
+{
+    srf08holder();
+    //srf08();
+    //holder_base();
+}

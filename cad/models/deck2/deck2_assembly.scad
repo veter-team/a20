@@ -4,8 +4,14 @@
 // STL files are from here:
 // http://www.thingiverse.com/thing:402498/#files
 
-use <../MCAD/boxes.scad>
+ASSEMBLY = 1;
+
 include <../main_dimensions.scad>
+use <../MCAD/boxes.scad>
+use <../base/base.scad>
+use <md22.scad>
+use <srf08holder.scad>
+use <rcreceiver.scad>
 
 mounting_hole_x_dist = 58;
 mounting_hole_y_dist = 49;
@@ -17,7 +23,7 @@ mounting_hole_r = 2.75 / 2;
 module rpi()
 {
     translate([54, -42.4, 0])
-    import("B+_Model_v4.stl", convexity = 3);
+    import("../parts/B+_Model_v4.stl", convexity = 3);
 
     // Mounting holes
     // top-left
@@ -35,15 +41,53 @@ module rpi()
 }
 
 
-module base()
+module units_placement()
 {
-    difference()
-    {
-        roundedBox([base_x_size, base_y_size, base_z_size], 3, true);
-        translate([0, 0, 2])
-        %rpi();
-    }
+    rpi_pos = [100, 40, 2];
+    rpi_rot = [0, 0, 0];
+    srf08_pos = [0, -80, 3];
+    srf08_rot = [90, 0, 180];
+    md22_pos = [-100, 40, 3];
+    md22_rot = [0, 0, 0];
+
+    // RaspberryPi
+    translate(rpi_pos)
+    rotate(rpi_rot)
+    color("SeaGreen")
+    rpi();
+
+    // Sonar with holder
+    translate(srf08_pos)
+    rotate(srf08_rot)
+    srf08holder(true);
+
+    // Motor controller
+    translate(md22_pos)
+    rotate(md22_rot)
+    md22();
 }
 
 
-base();
+module deck2_assembly()
+{
+    rcv_pos = [-100, -100, 3];
+    rcv_rot = [0, 0, 0];
+
+    difference()
+    {
+        base2();
+        // Cut mounting holes
+        units_placement();
+    }
+
+    // Visualize units
+    units_placement();
+
+    // RC receiver
+    translate(rcv_pos)
+    rotate(rcv_rot)
+    rcreceiver();
+}
+
+
+deck2_assembly();
