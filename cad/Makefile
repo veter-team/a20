@@ -7,7 +7,8 @@ BASE_SOURCES = \
 	base/motor_holder.scad \
 	base/rim.scad \
 	base/wheel_holder.scad \
-	base/front_pannel.scad
+	base/front_pannel.scad \
+	base/wheel_clutch.scad
 
 SOURCES = $(BASE_SOURCES:%.scad=$(INDIR)/%.scad)
 BASE_STLS = $(BASE_SOURCES:%.scad=$(OUTDIR)/%.stl)
