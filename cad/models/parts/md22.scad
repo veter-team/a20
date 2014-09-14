@@ -3,19 +3,21 @@ include <../main_dimensions.scad>
 
 module md22_base()
 {
+    capacitor_r = 22 / 2;
+    
     // Base board
     color("DarkGreen")
     cube(md22_dim);
 
     // Capacitor
-    translate([20 + 10, 5, md22_dim[2] + 10 + 2])
+    translate([20 + capacitor_r, 5, md22_dim[2] + capacitor_r - 0.1])
     rotate([-90, 0, 0])
     color("Gray")
-    cylinder(r = 10, h = md22_dim[1] - 2 * 5, $fn = 64);
+    cylinder(r = capacitor_r, h = md22_dim[1] - 2 * 5, $fn = 64);
     // Mounting wires (near)
     color("Gainsboro")
-    translate([20 + 10, 4, md22_dim[2]])
-    cylinder(r = 1, h = 10 + 2, $fn = 32);
+    translate([20 + capacitor_r, 4, md22_dim[2]])
+    cylinder(r = 1, h = capacitor_r, $fn = 32);
     // Mounting wires (far)
     color("Gainsboro")
     translate([20 + 10, md22_dim[1] - 4, md22_dim[2]])
@@ -32,7 +34,7 @@ module md22_base()
     cube([10, md22_dim[1] - 2 * 15, 10]);
 
     // Heat sinks
-    for(x = [42, 47])
+    for(x = [43, 48])
     {
         for(y = [2 : (md22_dim[1] - 2 * 2) / 4 : md22_dim[1] - 2 * 2])
         {

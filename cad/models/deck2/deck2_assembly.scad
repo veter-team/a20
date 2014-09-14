@@ -13,6 +13,7 @@ use <../parts/md22.scad>
 use <../parts/srf08holder.scad>
 use <../parts/rcreceiver.scad>
 use <../parts/rpicamera.scad>
+use <../parts/picoups.scad>
 use <cover1.scad>
 use <cover2.scad>
 
@@ -46,12 +47,14 @@ module rpi(parts_dir)
 
 module units_placement(parts_dir)
 {
-    rpi_pos = [rpi_y_dim - 8, 0, 20];
+    rpi_pos = [rpi_y_dim - 8, 0, cover2_h + 5];
     rpi_rot = [0, 0, 90];
-    srf08_pos = [-50, 0, 45];
+    srf08_pos = [-50, 0, cover1_h + 5];
     srf08_rot = [90, 0, 180];
     md22_pos = [90, 90, 3];
     md22_rot = [0, 0, 180];
+    picoups_pos = [-90, -90, 4];
+    picoups_rot = [0, 0, 0];
 
     // RaspberryPi
     translate(rpi_pos)
@@ -68,6 +71,11 @@ module units_placement(parts_dir)
     translate(md22_pos)
     rotate(md22_rot)
     md22();
+
+    // PicoUPS module
+    translate(picoups_pos)
+    rotate(picoups_rot)
+    picoups();
 }
     
 
@@ -75,7 +83,7 @@ module deck2_assembly(parts_dir)
 {
     rcv_pos = [-90, 50, 3];
     rcv_rot = [0, 0, 0];
-    cam_pos = [0, -110, -20];
+    cam_pos = [0, -90, 30];
     cam_rot = [90 + 19, 0, 0];
     
     difference()
@@ -96,7 +104,7 @@ module deck2_assembly(parts_dir)
     // RPi camera
     translate(cam_pos)
     rotate(cam_rot)
-    rpicamera(0);
+    rpicamera(500);
 
     color("Snow")
     {
@@ -107,3 +115,4 @@ module deck2_assembly(parts_dir)
 
 
 deck2_assembly("../parts");
+

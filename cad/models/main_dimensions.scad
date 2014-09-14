@@ -82,6 +82,9 @@ holder_shaft_r = 5 / 2 + tolerance / 2;
 
 md22_dim = [110, 51, 1.5];
 
+cover2_h = 25 + 1;
+cover1_h = cover2_h + 20 + 5;
+
 
 mount_hole_radius = 3 / 2 + tolerance / 2;
 
