@@ -83,7 +83,7 @@ module deck2_assembly(parts_dir)
 {
     rcv_pos = [-90, 50, 3];
     rcv_rot = [0, 0, 0];
-    cam_pos = [0, -90, 30];
+    cam_pos = [0, -100, 30];
     cam_rot = [90 + 19, 0, 0];
     
     difference()
@@ -104,9 +104,9 @@ module deck2_assembly(parts_dir)
     // RPi camera
     translate(cam_pos)
     rotate(cam_rot)
-    rpicamera(500);
+    rpicamera(200);
 
-    color("Snow")
+    color("Gray")
     {
         %cover1();
         %cover2();
