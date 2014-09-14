@@ -90,9 +90,6 @@ module base_assembly()
     //translate([-82 + 15, 79.5, -55]) cube([1, 10, 10]);
     
     // Base platform
-    //translate([0, 0, wheel_holder_z_dim / 2 + shaft_radius + 2 + base_z_size / 2 + 1])
-    //base2();
-    
     translate([0, 0, -wheel_holder_z_dim / 2 - shaft_radius - 2 - base_z_size / 2 - 1])
     base1();
     

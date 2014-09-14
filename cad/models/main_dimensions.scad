@@ -80,6 +80,8 @@ base_z_size = 3;
 
 holder_shaft_r = 5 / 2 + tolerance / 2;
 
+md22_dim = [110, 51, 1.5];
+
 
 mount_hole_radius = 3 / 2 + tolerance / 2;
 

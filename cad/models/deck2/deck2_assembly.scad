@@ -13,6 +13,8 @@ use <../parts/md22.scad>
 use <../parts/srf08holder.scad>
 use <../parts/rcreceiver.scad>
 use <../parts/rpicamera.scad>
+use <cover1.scad>
+use <cover2.scad>
 
 mounting_hole_x_dist = 58;
 mounting_hole_y_dist = 49;
@@ -44,12 +46,12 @@ module rpi(parts_dir)
 
 module units_placement(parts_dir)
 {
-    rpi_pos = [100, 40, 2];
-    rpi_rot = [0, 0, 0];
-    srf08_pos = [0, -80, 3];
+    rpi_pos = [rpi_y_dim - 8, 0, 20];
+    rpi_rot = [0, 0, 90];
+    srf08_pos = [-50, 0, 45];
     srf08_rot = [90, 0, 180];
-    md22_pos = [-100, 40, 3];
-    md22_rot = [0, 0, 0];
+    md22_pos = [90, 90, 3];
+    md22_rot = [0, 0, 180];
 
     // RaspberryPi
     translate(rpi_pos)
@@ -67,14 +69,14 @@ module units_placement(parts_dir)
     rotate(md22_rot)
     md22();
 }
-
+    
 
 module deck2_assembly(parts_dir)
 {
-    rcv_pos = [-100, -100, 3];
+    rcv_pos = [-90, 50, 3];
     rcv_rot = [0, 0, 0];
-    cam_pos = [0, 0, 50];
-    cam_rot = [90, 0, 0];
+    cam_pos = [0, -110, -20];
+    cam_rot = [90 + 19, 0, 0];
     
     difference()
     {
@@ -94,7 +96,13 @@ module deck2_assembly(parts_dir)
     // RPi camera
     translate(cam_pos)
     rotate(cam_rot)
-    rpicamera();
+    rpicamera(0);
+
+    color("Snow")
+    {
+        %cover1();
+        %cover2();
+    }
 }
 
 

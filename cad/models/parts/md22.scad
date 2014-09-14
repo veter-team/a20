@@ -1,7 +1,5 @@
 include <../main_dimensions.scad>
 
-md22_dim = [110, 51, 1.5];
-
 
 module md22_base()
 {
