@@ -43,28 +43,45 @@ class LocomotionServer(Ice.Application):
             obj = self.communicator().propertyToProxy('sensorstorm.Proxy')
             topic_manager = IceStorm.TopicManagerPrx.checkedCast(obj)
             
+            node_name = platform.node()
             retr = 0
-            topic = None
-            while topic is None and retr < 5:
+            node_topic = None
+            while node_topic is None and retr < 3:
                 try:
-                    topic = topic_manager.retrieve('syslog')
+                    node_topic = topic_manager.retrieve(node_name)
                 except IceStorm.NoSuchTopic as ex:
                     try:
-                        topic = topic_manager.create('syslog')
+                        node_topic = topic_manager.create(node_name)
                     except IceStorm.TopicExists as ex:
                         time.sleep(2)
                 retr += 1
 
-            if topic is None:
-                log.error('Can not create topic syslog after {0} attempts'.format(retr))
+            if node_topic is None:
+                log.error('Can not create {0} topic after {1} attempts'.format(node_name, retr))
                 return 2
 
-            pub = topic.getPublisher().ice_oneway()
+            retr = 0
+            sensor_topic = None
+            while sensor_topic is None and retr < 3:
+                try:
+                    sensor_topic = topic_manager.retrieve('syslog')
+                except IceStorm.NoSuchTopic as ex:
+                    try:
+                        sensor_topic = topic_manager.create('syslog')
+                    except IceStorm.TopicExists as ex:
+                        time.sleep(2)
+                retr += 1
+
+            if sensor_topic is None:
+                log.error('Can not create syslog topic after {0} attempts'.format(retr))
+                return 2
+
+            pub = sensor_topic.getPublisher().ice_oneway()
             #pub = topic.getPublisher().ice_datagram() # Use UDP
             observer = Sensor.SensorObserverPrx.uncheckedCast(pub);
 
             adapter = self.communicator().createObjectAdapter('sensor')
-            sensor = SyslogSensorI(logger, topic)
+            sensor = SyslogSensorI(logger, sensor_topic)
             adapter.add(sensor, 
                         self.communicator().stringToIdentity('syslog'))
             adapter.activate()

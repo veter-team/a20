@@ -52,6 +52,16 @@ class Subscriber(Ice.Application):
             print('Invalid topic manager proxy')
             return 1
 
+        print('Topic list:')
+        topic_dict = manager.retrieveAll()
+        for topic_name, topic_prx in topic_dict.items():
+            print(topic_name)
+            link_info_seq = topic_prx.getLinkInfoSeq()
+            print('  linked topics:')
+            for link_info in link_info_seq:
+                print('    {0} cost {1}'.format(link_info.name, link_info.cost))
+            
+
         # Retrieve the topic.
         topic_name = 'syslog'
         try:
