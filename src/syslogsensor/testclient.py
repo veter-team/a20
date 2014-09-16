@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import sys, traceback, Ice, IceStorm
+import sys, traceback, platform
+import Ice, IceStorm
 
 Ice.loadSlice('--all -I' + Ice.getSliceDir() + ' -I../interfaces/' + ' ../interfaces/sensor.ice')
 Ice.updateModules()
@@ -27,6 +28,7 @@ sensor_type = {
     Sensor.positiony : 'POSITIONY',
     Sensor.positionz : 'POSITIONZ',
     Sensor.brightness : 'BRIGHTNESS'
+    Sensor.video : 'VIDEO'
 }
 
 
@@ -63,7 +65,7 @@ class Subscriber(Ice.Application):
             
 
         # Retrieve the topic.
-        topic_name = 'syslog'
+        topic_name = platform.node()
         try:
             topic = manager.retrieve(topic_name)
         except IceStorm.NoSuchTopic as e:

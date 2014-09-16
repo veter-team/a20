@@ -29,17 +29,19 @@ module Sensor
     const int positiony = 17;
     const int positionz = 18;
     const int brightness = 19;
-
+    const int video = 20;
 
     dictionary<int, Ice::StringSeq> TextData;
     dictionary<int, float> FloatData;
     dictionary<int, int> IntData;
+    dictionary<int, Ice::ByteSeq> ByteData;
 
     struct Frame
     {
         TextData txtvals;
         FloatData floatvals;
         IntData intvals;
+        ByteData bytevals;
     };
 
     // Callback interface for sensor observers

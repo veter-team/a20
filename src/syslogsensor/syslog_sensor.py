@@ -76,6 +76,14 @@ class LocomotionServer(Ice.Application):
                 log.error('Can not create syslog topic after {0} attempts'.format(retr))
                 return 2
 
+            # Make sensor events available through node topic
+            try:
+                sensor_topic.link(node_topic, 0)
+            except IceStorm.LinkExists as ex:
+                # Link already exists. Cool.
+                pass
+
+
             pub = sensor_topic.getPublisher().ice_oneway()
             #pub = topic.getPublisher().ice_datagram() # Use UDP
             observer = Sensor.SensorObserverPrx.uncheckedCast(pub);
