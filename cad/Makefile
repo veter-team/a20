@@ -7,7 +7,9 @@ OUTDIR = for3dprint
 BASE_SOURCES = \
 	base/wheel_holder.scad \
 	base/front_pannel.scad \
-	base/wheel_clutch.scad
+	base/wheel_clutch.scad \
+	base/bottom_battery_holder.scad \
+	base/bottom_battery_stopper.scad
 
 DECK2_SOURCES = \
 	deck2/cover1.scad \

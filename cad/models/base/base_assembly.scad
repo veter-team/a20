@@ -4,6 +4,8 @@ ASSEMBLY = 1;
 use <wheel_motor_block.scad>
 use <base.scad>
 use <lead_battery.scad>
+use <bottom_battery_holder.scad>
+use <bottom_battery_stopper.scad>
 use <tower.scad>
 use <belt.scad>
 use <front_pannel.scad>
@@ -11,8 +13,10 @@ use <screw_thread.scad>
 use <motor_holder.scad>
 include <../main_dimensions.scad>
 
+
 explosion_distance = 3;
 distance_betwee_wheels = (330.5 - 2 * 3.1415 * belt_gear_r2) / 2 / 2;
+
 
 module wheel_motor_placement()
 {
@@ -96,6 +100,22 @@ module base_assembly()
     // Battery
     translate([0, 0, -wheel_holder_z_dim / 2 - shaft_radius - 2 + base_z_size / 2])
     lead_battery();
+
+    // Battery holders on the deck1
+    color("Snow")
+    {
+        translate([0, akku_y_dim / 2 + 5 + 3, -wheel_holder_z_dim / 2 - shaft_radius - 2 + base_z_size / 2])
+        bottom_battery_holder();
+
+        translate([0, -akku_y_dim / 2 - 5 - 3, -wheel_holder_z_dim / 2 - shaft_radius - 2 + base_z_size / 2])
+        bottom_battery_holder();
+
+        translate([akku_x_dim / 2 + 5 + 1, 0, -wheel_holder_z_dim / 2 - shaft_radius - 2 + base_z_size / 2])
+        bottom_battery_stopper();
+        
+        translate([-akku_x_dim / 2 - 5 - 1, 0, -wheel_holder_z_dim / 2 - shaft_radius - 2 + base_z_size / 2])
+        bottom_battery_stopper();
+    }
     
     // Passive wheels
     wheel_placement();
