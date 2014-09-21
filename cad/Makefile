@@ -13,7 +13,8 @@ BASE_SOURCES = \
 
 DECK2_SOURCES = \
 	deck2/cover1.scad \
-	deck2/cover2.scad
+	deck2/cover2.scad \
+	deck2/rpi_holder.scad
 
 #SOURCES = $(BASE_SOURCES:%.scad=$(INDIR)/%.scad)
 BASE_STLS = $(BASE_SOURCES:%.scad=$(OUTDIR)/%.stl)

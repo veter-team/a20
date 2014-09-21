@@ -14,8 +14,11 @@ use <../parts/srf08holder.scad>
 use <../parts/rcreceiver.scad>
 use <../parts/rpicamera.scad>
 use <../parts/picoups.scad>
+use <../base/lead_battery.scad>
 use <cover1.scad>
 use <cover2.scad>
+use <rpi_holder.scad>
+
 
 mounting_hole_x_dist = 58;
 mounting_hole_y_dist = 49;
@@ -49,6 +52,8 @@ module units_placement(parts_dir)
 {
     rpi_pos = [rpi_y_dim - 8, 0, cover2_h + 5];
     rpi_rot = [0, 0, 90];
+    rpi_holder_pos = [rpi_pos[0], rpi_pos[1], 0];
+    rpi_holder_rot = rpi_rot;
     srf08_pos = [-50, 0, cover1_h + 5];
     srf08_rot = [90, 0, 180];
     md22_pos = [90, 90, 3];
@@ -62,6 +67,12 @@ module units_placement(parts_dir)
     color("SeaGreen")
     rpi(parts_dir);
 
+    // RaspberryPi holder
+    translate(rpi_holder_pos)
+    rotate(rpi_holder_rot)
+    color("Snow")
+    rpi_holder();
+    
     // Sonar with holder
     translate(srf08_pos)
     rotate(srf08_rot)
@@ -105,12 +116,19 @@ module deck2_assembly(parts_dir)
     translate(cam_pos)
     rotate(cam_rot)
     rpicamera(200);
-
+/*
     color("Gray")
     {
         %cover1();
         %cover2();
     }
+*/
+
+    // Battery
+    translate([0, 0,
+            -wheel_holder_z_dim / 2 - shaft_radius - 2 + base_z_size / 2
+            - (wheel_holder_z_dim / 2 + shaft_radius + 2 + base_z_size / 2 + 1)])
+    lead_battery();
 }
 
 

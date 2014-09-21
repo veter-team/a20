@@ -98,8 +98,8 @@ module base_assembly()
     base1();
     
     // Battery
-    translate([0, 0, -wheel_holder_z_dim / 2 - shaft_radius - 2 + base_z_size / 2])
-    lead_battery();
+    //translate([0, 0, -wheel_holder_z_dim / 2 - shaft_radius - 2 + base_z_size / 2])
+    //lead_battery();
 
     // Battery holders on the deck1
     color("Snow")
