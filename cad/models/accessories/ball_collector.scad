@@ -101,8 +101,11 @@ first_curve_r = rotor_r + 2 * ball_r;
 shoot_angle = 75;
 cut_angle = 90 - shoot_angle;
 
-module first_curve()
+module first_curve(inc_angle)
 {
+    ang = inc_angle ? cut_angle - 0.1 : cut_angle;
+    x_shift = inc_angle ?  0.1 : 0;
+
     intersection()
     {
         rotate([0, 90, 0])
@@ -111,9 +114,9 @@ module first_curve()
         linear_extrude(height = blade_w + 0.3)
         polygon(points=[
                 [0, 0],
-                [0, -first_curve_r - 0.1],
+                [-x_shift, -first_curve_r - 0.1],
                 [first_curve_r + 0.1, -first_curve_r - 0.1],
-                [(first_curve_r + 0.1) * cos(cut_angle), -first_curve_r * sin(cut_angle)]
+                [(first_curve_r + 0.1) * cos(ang), -first_curve_r * sin(ang)]
             ]);
      
         rotate([0, 90, 0])
@@ -124,23 +127,19 @@ module first_curve()
 
 module ball_collector()
 {
-    cca = cos(cut_angle);
-    sca = sin(cut_angle);
-    shift_x = blade_h * cca;
-    shift_y = blade_h * sca + 0.05;
+    k = (first_curve_r - blade_h) / first_curve_r;
     
     difference()
     {
-        first_curve();
+        first_curve(false);
 
-        translate([0, -shift_x, shift_y])
-        scale([1.1, 1, 1])
-        first_curve();
+        scale([1.1, k, k])
+        first_curve(true);
     }
 
     rotate([0, 90, 0])
     rotate([0, 0, 90])
-    translate([(first_curve_r - blade_h) * cca, -(first_curve_r - blade_h) * sca, -blade_w / 2])
+    translate([(first_curve_r - blade_h) * cos(cut_angle), -(first_curve_r - blade_h) * sin(cut_angle), -blade_w / 2])
     BezWall( [
             [0, 0],
             [7, 30],
