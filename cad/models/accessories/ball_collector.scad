@@ -1,4 +1,5 @@
 use <../BezierScad.scad>
+use <../MCAD/regular_shapes.scad>
 include <../main_dimensions.scad>
 
 
@@ -16,90 +17,23 @@ mount_pin_r = 5 / 2 + tolerance;
 rotor_r = 60 / 2;
 
 
-module sidewall()
-{
-    linear_extrude(height = 3)
-    BezLine([
-            [0,3],
-            [40,3],
-            [100,30],
-            [110,100],
-            [140,100]
-        ], width = [-side_wall_h, -side_wall_h], resolution = 6,
-        centered = false);
-}
-
-
-module blade_base()
-{
-    hole_r = 10;
-
-    difference()
-    {
-        BezWall( [
-                [0,3],
-                [40,3],
-                [100,30],
-                [110,100],
-                [140,100]
-            ] , width = blade_h, height = blade_w, steps = 128,
-            centered = false );
-
-        translate([0, 30, blade_w / 2])
-        rotate([0, 90, 0])
-        cylinder(r = hole_r, h = 200, $fn = 128);
-
-        translate([0, 60, blade_w / 2])
-        rotate([0, 90, 0])
-        cylinder(r = hole_r, h = 200, $fn = 128);
-    }
-
-    // Blade front side
-    translate([0, blade_h / 2, 0])
-    cylinder(r = blade_h / 2, h = blade_w, $fn = 32);
-    // Blade back side
-    translate([140, 100 - blade_h / 2, 0])
-    cylinder(r = blade_h / 2, h = blade_w, $fn = 32);
-}
-
-
-module blade()
-{
-    difference()
-    {
-        union()
-        {
-            blade_base();
-
-            // Mounting cylinders
-            translate([50, 11, 0])
-            cylinder(r = mount_pin_r + 2, h = blade_w, $fn = 32);
-
-            translate([120, 80, 0])
-            cylinder(r = mount_pin_r + 2, h = blade_w, $fn = 32);
-        }
-
-        // Mounting pin holes
-        translate([50, 11, -0.1])
-        cylinder(r = mount_pin_r, h = blade_w + 0.3, $fn = 32);
-
-        translate([120, 80, -0.1])
-        cylinder(r = mount_pin_r, h = blade_w + 0.3, $fn = 32);
-    }
-}
-
-
-// Tennis ball
-//translate([0, ball_r, blade_w])
-//%sphere(r = ball_r);
-
-//blade();
-//sidewall();
-
 blade_w = base_x_size + 2 * wheel_width;
 first_curve_r = rotor_r + 2 * ball_r;
 shoot_angle = 75;
 cut_angle = 90 - shoot_angle;
+
+
+module sidewall()
+{
+    linear_extrude(height = blade_h)
+    BezLine([
+            [0, 0],
+            [7, 30],
+            [50, 50]
+        ], width = [-side_wall_h, -side_wall_h], resolution = 6,
+        centered = false);
+}
+
 
 module first_curve(inc_angle)
 {
@@ -113,7 +47,7 @@ module first_curve(inc_angle)
         translate([0, 0, -blade_w / 2])
         linear_extrude(height = blade_w + 0.3)
         polygon(points=[
-                [0, 0],
+                [-x_shift, x_shift],
                 [-x_shift, -first_curve_r - 0.1],
                 [first_curve_r + 0.1, -first_curve_r - 0.1],
                 [(first_curve_r + 0.1) * cos(ang), -first_curve_r * sin(ang)]
@@ -124,33 +58,138 @@ module first_curve(inc_angle)
     }
 }
 
+module rib(radius)
+{
+    difference()
+    {
+        // Cut the sharp edge out
+        scale([3, 1, 1])
+        triangle_prism(40, radius + 1);
+        
+        translate([-5, radius - 1, -0.1])
+        cube([10, 3, 40 + 0.3]);
+    }
+}
+
 
 module ball_collector()
 {
     k = (first_curve_r - blade_h) / first_curve_r;
-    
+    cyl_r = holder_shaft_r + 2;
+    second_holder_angle = 60;
+
     difference()
     {
-        first_curve(false);
+        union()
+        {
+            difference()
+            {
+                union()
+                {
+                    for(x = [-blade_w / 2 : blade_w / 4 : blade_w / 2])
+                    {
+                        translate([x,
+                                (first_curve_r - (blade_h - cyl_r)) * cos(second_holder_angle),
+                                -(first_curve_r - (blade_h - cyl_r)) * sin(second_holder_angle) - 1])
+                        rotate([0, 0, 180])
+                        rotate([-99, 0, 0])
+                        rib(cyl_r);
+                    }
+                    first_curve(false);
+                }
 
-        scale([1.1, k, k])
-        first_curve(true);
+                // Cut out half of the side rib
+                translate([-blade_w / 2,
+                        (first_curve_r - (blade_h - cyl_r)) * cos(second_holder_angle) + 1,
+                        -(first_curve_r - (blade_h - cyl_r)) * sin(second_holder_angle) - 15])
+                rotate([0, 0, 180])
+                cube([20, 50, 30]);
+
+                // Cut out half of the other side rib
+                translate([blade_w / 2 + 20,
+                        (first_curve_r - (blade_h - cyl_r)) * cos(second_holder_angle) + 1,
+                        -(first_curve_r - (blade_h - cyl_r)) * sin(second_holder_angle) - 15])
+                rotate([0, 0, 180])
+                cube([20, 50, 30]);
+                
+                scale([(blade_w - 2 * blade_h) / blade_w, k, k])
+                first_curve(true);
+            }
+        
+            rotate([0, 90, 0])
+            rotate([0, 0, 90])
+            translate([(first_curve_r - blade_h) * cos(cut_angle) - 0.08,
+                    -(first_curve_r - blade_h) * sin(cut_angle) - 0.2,
+                    -blade_w / 2])
+            BezWall( [
+                    [0, 0],
+                    [7, 30],
+                    [50, 50]
+                    
+                ] , width = blade_h, height = blade_w, steps = 128,
+                centered = false );    
+
+            // Mounting cylinders on the bottom side
+            translate([0,
+                    (first_curve_r - (blade_h - cyl_r)) * cos(cut_angle),
+                    -(first_curve_r - (blade_h - cyl_r)) * sin(cut_angle)])
+            rotate([0, 90, 0])
+            cylinder(r = cyl_r, h = blade_w, center = true, $fn = 64);
+            
+            translate([0,
+                    (first_curve_r - (blade_h - cyl_r)) * cos(second_holder_angle),
+                    -(first_curve_r - (blade_h - cyl_r)) * sin(second_holder_angle)])
+            rotate([0, 90, 0])
+            cylinder(r = cyl_r, h = blade_w, center = true, $fn = 64);
+
+            // Front rounding cylinder
+            translate([0, 0, -(first_curve_r - blade_h / 2)])
+            rotate([0, 90, 0])
+            cylinder(r = blade_h / 2, h = blade_w, center = true, $fn = 32);
+        }
+
+        // Holes in the mounting cylinder on bottom side
+        translate([0,
+                (first_curve_r - (blade_h - cyl_r)) * cos(cut_angle),
+                -(first_curve_r - (blade_h - cyl_r)) * sin(cut_angle)])
+        rotate([0, 90, 0])
+        cylinder(r = holder_shaft_r, h = blade_w + 0.2,
+            center = true, $fn = 64);
+    
+        translate([0,
+                (first_curve_r - (blade_h - cyl_r)) * cos(second_holder_angle),
+                -(first_curve_r - (blade_h - cyl_r)) * sin(second_holder_angle)])
+        rotate([0, 90, 0])
+        cylinder(r = holder_shaft_r, h = blade_w + 0.2,
+            center = true, $fn = 64);
     }
 
+    // Side wall upper parts
     rotate([0, 90, 0])
     rotate([0, 0, 90])
-    translate([(first_curve_r - blade_h) * cos(cut_angle), -(first_curve_r - blade_h) * sin(cut_angle), -blade_w / 2])
-    BezWall( [
-            [0, 0],
-            [7, 30],
-            [50, 50]
-            
-        ] , width = blade_h, height = blade_w, steps = 128,
-        centered = false );    
+    translate([(first_curve_r - blade_h) * cos(cut_angle) - 0.08,
+            -(first_curve_r - blade_h) * sin(cut_angle) - 0.2,
+            -blade_w / 2])
+    sidewall();
+    
+    rotate([0, 90, 0])
+    rotate([0, 0, 90])
+    translate([(first_curve_r - blade_h) * cos(cut_angle) - 0.08,
+            -(first_curve_r - blade_h) * sin(cut_angle) - 0.2,
+            blade_w / 2 - blade_h])
+    sidewall();
 }
 
 
 if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
+    // Tennis ball
+    translate([0, 0, -rotor_r - ball_r])
+    %sphere(r = ball_r);
+
+    // Rotor
+    rotate([0, 90, 0])
+    %cylinder(r = rotor_r, h = blade_w, center = true);
+    
     ball_collector();
 }
