@@ -3,6 +3,7 @@ use <../MCAD/regular_shapes.scad>
 use <../MCAD/boxes.scad>
 use <../base/motor.scad>
 use <../base/motor_holder.scad>
+use <../base/shaft_coupling.scad>
 include <../main_dimensions.scad>
 
 
@@ -232,13 +233,10 @@ module motor_box()
                 translate([0, 0, motor_holder_z_dim - motor_holder_y_dim / 2])
                 for(a = [0 : 360 / 4 : 360])
                 {
-                    difference()
-                    {
-                        rotate([a + 45, 0, 0])
-                        translate([0, motor_holder_y_dim / 2 + 4, 0])
-                        rotate([0, 90, 0])
-                        cylinder(r = 3.5, h = tube_len, $fn = 32);
-                    }
+                    rotate([a + 45, 0, 0])
+                    translate([0, motor_holder_y_dim / 2 + 4, 0])
+                    rotate([0, 90, 0])
+                    cylinder(r = 3.5, h = tube_len, $fn = 32);
                 }
             }
 
@@ -262,6 +260,84 @@ module motor_box()
 }
 
 
+module coupling_cover_whole()
+{
+    cover_len = 37;
+
+    difference()
+    {
+        union()
+        {
+            difference()
+            {
+                translate([motor_shaft_shift, 0, 0])
+                difference()
+                {
+                    cylinder(r = motor_holder_y_dim / 2 + 3, h = cover_len, $fn = 128);
+        
+                    translate([0, 0, radial_bearing_h + 2])
+                    cylinder(r = motor_holder_y_dim / 2, h = cover_len, $fn = 128);
+                }
+                
+                translate([0, 0, 1])
+                cylinder(r = radial_bearing_r, h = radial_bearing_h, $fn = 128);
+        
+                cylinder(r = radial_bearing_r - 2, h = 40, $fn = 128);
+        
+                for(a = [0 : 180 / 2 : 180])
+                {
+                    translate([motor_shaft_shift, 0, (cover_len - 18) / 2 + 9])
+                    rotate([0, 0, a])
+                    rotate([0, 90, 0])
+                    roundedBox([cover_len - 18, 10, 3 * motor_holder_y_dim], 4, true, $fn = 32);
+                }
+            }
+        
+            translate([motor_shaft_shift, 0, 0])
+            for(a = [0 : 360 / 4 : 360])
+            {
+                rotate([0, 0, a + 45])
+                translate([0, motor_holder_y_dim / 2 + 4, 0])
+                cylinder(r = 3.5, h = cover_len, $fn = 32);
+            }
+        }
+        
+        translate([motor_shaft_shift, 0, 0])
+        for(a = [0 : 360 / 4 : 360])
+        {
+            rotate([0, 0, a + 45])
+            translate([0, motor_holder_y_dim / 2 + 4, -0.1])
+            cylinder(r = 1.5 + tolerance, h = cover_len + 0.3, $fn = 32);
+        }
+    }
+}
+
+
+module coupling_cover_main()
+{
+    translate([0, 0, -(radial_bearing_h + 1)])
+    difference()
+    {
+        coupling_cover_whole();
+
+        translate([motor_shaft_shift, 0, -0.1])
+        cylinder(r = motor_holder_y_dim / 2 + 20, h = radial_bearing_h + 1.1, $fn = 128);
+    }
+}
+
+
+module coupling_cover_bearing_pocket()
+{
+    difference()
+    {
+        coupling_cover_whole();
+
+        translate([motor_shaft_shift, 0, radial_bearing_h + 0.9])
+        cylinder(r = motor_holder_y_dim / 2 + 20, h = 50, $fn = 128);
+    }
+}
+
+
 if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
     // Tennis ball
@@ -272,8 +348,16 @@ if(ASSEMBLY == undef || ASSEMBLY == 0)
     //rotate([0, 90, 0])
     //%cylinder(r = rotor_r, h = blade_w, center = true);
 
-    rotate([0, -90, 0])
-    motor_box();
+    //translate([37, 0, 0])
+    //motor_box();
+
+    //translate([27, 0, 0])
+    //rotate([0, -90, 0])
+    //shaft_coupling();
+
+    coupling_cover_main();
+    //coupling_cover_bearing_pocket();
+    
 
     //ball_collector();    
 }
