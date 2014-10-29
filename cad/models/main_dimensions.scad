@@ -88,6 +88,10 @@ cover1_h = cover2_h + 20 + 5;
 
 mount_hole_radius = 3 / 2 + tolerance / 2;
 
+ball_r = 70 / 2;
+rotor_r = 76 / 2;
+blade_w = base_x_size + 2 * wheel_width;
+
 
 module mounting_hole(thickness, use_bolt)
 {

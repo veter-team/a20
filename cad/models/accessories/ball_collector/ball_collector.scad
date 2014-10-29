@@ -1,13 +1,11 @@
-use <../BezierScad.scad>
-use <../MCAD/regular_shapes.scad>
-use <../MCAD/boxes.scad>
-use <../base/motor.scad>
-use <../base/motor_holder.scad>
-use <../base/shaft_coupling.scad>
-include <../main_dimensions.scad>
+use <../../BezierScad.scad>
+use <../../MCAD/regular_shapes.scad>
+use <../../MCAD/boxes.scad>
+use <../../base/motor.scad>
+use <../../base/motor_holder.scad>
+use <../../base/shaft_coupling.scad>
+include <../../main_dimensions.scad>
 
-
-tolerance = 0.2;
 
 ball_r = 70 / 2;
 
@@ -348,14 +346,14 @@ if(ASSEMBLY == undef || ASSEMBLY == 0)
     //rotate([0, 90, 0])
     //%cylinder(r = rotor_r, h = blade_w, center = true);
 
-    //translate([37, 0, 0])
-    //motor_box();
+    translate([37, 0, 0])
+    motor_box();
 
     //translate([27, 0, 0])
     //rotate([0, -90, 0])
     //shaft_coupling();
 
-    coupling_cover_main();
+    //coupling_cover_main();
     //coupling_cover_bearing_pocket();
     
 
