@@ -3,6 +3,7 @@ ASSEMBLY = 1;
 use <rotor_shaft.scad>
 use <ball_collector_blade.scad>
 use <motor_box.scad>
+use <cone_gear.scad>
 include <../../main_dimensions.scad>
 
 
@@ -16,6 +17,11 @@ motor_box();
 // Tennis ball
 translate([0, 0, -rotor_r - ball_r])
 %sphere(r = ball_r);
+
+// Shaft
+rotate([0, 90, 0])
+color("Gray")
+cylinder(r = shaft_radius, h = blade_w + 2 * 10, center = true);
 
 // Rotor
 rotate([0, 90, 0])
