@@ -6,7 +6,7 @@ include <../../main_dimensions.scad>
 
 
 side_wall_h = ball_r * 2;
-side_wall_thickness = 5;
+side_wall_thickness = radial_bearing_h + 1;
 blade_h = 3;
 mount_pin_r = 5 / 2 + tolerance;
 first_curve_r = rotor_r + 2 * ball_r;
@@ -63,7 +63,7 @@ module rib(radius)
 }
 
 
-module ball_collector_blade()
+module ball_collector_blade_base()
 {
     k = (first_curve_r - blade_h) / first_curve_r;
     cyl_r = holder_shaft_r + 2;
@@ -172,11 +172,98 @@ module ball_collector_blade()
 }
 
 
+module bearing_mounting()
+{
+    or = radial_bearing_r + 10;
+    
+    translate([blade_w / 2, 0, 0])
+    rotate([0, -90, 0])
+    cylinder(r = or, h = side_wall_thickness, $fn = 128);
+
+    //translate([blade_w / 2 - side_wall_thickness, 0, -or])
+    //cube([side_wall_thickness, 60, 2 * or]);
+    translate([blade_w / 2, 0, 0])
+    rotate([0, 0, -90])
+    rotate([90, 0, 0])
+    linear_extrude(height = side_wall_thickness)
+    polygon(points=[
+            [0,or],
+            [-20, or + 10],
+            [-60, or + 10],
+            [-60, -30],
+            [0, -30]
+        ]);
+    
+    translate([blade_w / 2, 0, 0])
+    rotate([0, 0, -90])
+    rotate([90, 0, 0])
+    linear_extrude(height = side_wall_thickness)
+    polygon(points=[
+            [-1,0],
+            [or, 0],
+            [or, -50],
+            [-1,-80]
+        ]);
+
+}
+
+
+module ball_collector_blade()
+{
+    difference()
+    {
+        union()
+        {
+            ball_collector_blade_base();
+
+            bearing_mounting();
+            mirror([1, 0, 0])
+            bearing_mounting();
+        }
+
+        // Right bearing hole
+        hull()
+        {
+            translate([blade_w / 2 - (side_wall_thickness - radial_bearing_h) - 0.05, 0, 0])
+            rotate([0, -90, 0])
+            cylinder(r = radial_bearing_r, h = radial_bearing_h, $fn = 128);
+
+            translate([blade_w / 2 - (side_wall_thickness - radial_bearing_h) - 0.05, 0, -20])
+            rotate([0, -90, 0])
+            cylinder(r = radial_bearing_r, h = radial_bearing_h, $fn = 128);
+        }
+        
+        // Left bearing hole
+        hull()
+        {
+            translate([-blade_w / 2 + (side_wall_thickness - radial_bearing_h) + 0.05, 0, 0])
+            rotate([0, 90, 0])
+            cylinder(r = radial_bearing_r, h = radial_bearing_h, $fn = 128);
+
+            translate([-blade_w / 2 + (side_wall_thickness - radial_bearing_h) + 0.05, 0, -20])
+            rotate([0, 90, 0])
+            cylinder(r = radial_bearing_r, h = radial_bearing_h, $fn = 128);
+        }
+        
+        // Shaft hole
+        hull()
+        {
+            rotate([0, 90, 0])
+            cylinder(r = shaft_radius, h = blade_w + 10, center = true, $fn = 64);
+
+            translate([0, 0, -20])
+            rotate([0, 90, 0])
+            cylinder(r = shaft_radius, h = blade_w + 10, center = true, $fn = 64);
+        }
+    }
+}
+
+
 if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
     //translate([27, 0, 0])
     //rotate([0, -90, 0])
     //shaft_coupling();
 
-    ball_collector_blade();    
+    ball_collector_blade();
 }

@@ -8,9 +8,9 @@ module cone_gear()
     {
         union()
         {
-            cylinder(r = 6, h = 9, $fn = 64);
-            translate([0, 0, 8])
-            cylinder(r1 = 10, r2 = 6, h = 5);
+            cylinder(r = 15 / 2, h = 7, $fn = 64);
+            translate([0, 0, 6.5])
+            cylinder(r1 = 16.8 / 2, r2 = 12.7 / 2, h = 5.3);
         }
 
         translate([0, 0 , -1])

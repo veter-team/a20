@@ -96,11 +96,9 @@ module motor_box()
             
         }
 
-/*
         translate([1.5 * motor_holder_h, 0, 25.0])
         rotate([0, -90, 0])
-        %motor();
-*/        
+        motor();
     }
 }
 
@@ -108,5 +106,4 @@ module motor_box()
 if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
     motor_box();
-    //mounting_foot();
 }

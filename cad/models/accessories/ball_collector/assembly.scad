@@ -6,13 +6,25 @@ use <motor_box.scad>
 use <cone_gear.scad>
 include <../../main_dimensions.scad>
 
+motor_shift_x = 22;
+motor_shift_y = 28;
 
 ball_collector_blade();
 
-rotate([30, 0, 0])
-translate([-blade_w / 2 - 20, 20, 0])
+rotate([20, 0, 0])
+translate([-blade_w / 2 - motor_shift_x, motor_shift_y, 0])
 rotate([0, 0, 90])
 motor_box();
+
+translate([-blade_w / 2 - 4, 0, 0])
+rotate([0, -90, 0])
+cone_gear();
+
+rotate([20, 0, 0])
+translate([-blade_w / 2 - motor_shift_x, motor_shift_y - 10, 0])
+rotate([90, 0, 0])
+%cone_gear();
+
 
 // Tennis ball
 translate([0, 0, -rotor_r - ball_r])
