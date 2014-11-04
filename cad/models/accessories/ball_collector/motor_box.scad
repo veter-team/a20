@@ -7,7 +7,7 @@ include <../../main_dimensions.scad>
 tube_len = 80;
 
 
-module mounting_foot()
+module mounting_foot(for_mounting_holes)
 {
     middle_x = 30;
     foot_h = 3;
@@ -39,12 +39,21 @@ module mounting_foot()
                 cylinder(r = mount_hole_radius, h = foot_h + 2, $fn = 32);
             }
         }
+        if(for_mounting_holes == true)
+        {
+            // close
+            translate([0, -(motor_holder_y_dim + 0) / 2, 0])
+            cylinder(r = mount_hole_radius, h = foot_h + 50, center = true, $fn = 32);
+            // far
+            translate([0, (motor_holder_y_dim + 0) / 2, 0])
+            cylinder(r = mount_hole_radius, h = foot_h + 50, center = true, $fn = 32);
+        }
     }
 }
 
 
-module motor_box()
-{    
+module motor_box_base(for_mounting_holes)
+{
     translate([0, 0, -25 - motor_shaft_shift])
     {
         difference()
@@ -74,11 +83,11 @@ module motor_box()
                 translate([0, -motor_holder_y_dim / 2 - 3, 25])
                 rotate([-90, 0, 0])
                 {
-                    mounting_foot();
+                    mounting_foot(for_mounting_holes);
                 
                     translate([tube_len, 0, 0])
                     rotate([0, 0, 180])
-                    mounting_foot();
+                    mounting_foot(for_mounting_holes);
                 }
             }
 
@@ -103,7 +112,23 @@ module motor_box()
 }
 
 
+module motor_box(for_mounting_holes, angle)
+{
+    if(for_mounting_holes == true)
+    {
+        difference()
+        {
+            motor_box_base(true, angle);
+            cube([tube_len * 3, motor_holder_y_dim + 2 * 3 + 0.05, 100], center = true);
+        }
+    }
+    else
+    {
+        motor_box_base(false, angle);
+    }
+}
+
 if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
-    motor_box();
+    motor_box(false);
 }

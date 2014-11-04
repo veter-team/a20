@@ -9,12 +9,24 @@ include <../../main_dimensions.scad>
 motor_shift_x = 22;
 motor_shift_y = 28;
 
-ball_collector_blade();
 
-rotate([20, 0, 0])
-translate([-blade_w / 2 - motor_shift_x, motor_shift_y, 0])
-rotate([0, 0, 90])
-motor_box();
+module motor_positioned(for_mounting_holes)
+{
+    angle = 20;
+    rotate([angle, 0, 0])
+    translate([-blade_w / 2 - motor_shift_x-1, motor_shift_y, 0])
+    rotate([0, 0, 90])
+    motor_box(for_mounting_holes, angle);
+}
+
+difference()
+{
+    ball_collector_blade();
+
+    translate([0, 0, 0])
+    motor_positioned(true);
+}
+motor_positioned(false);
 
 translate([-blade_w / 2 - 4, 0, 0])
 rotate([0, -90, 0])

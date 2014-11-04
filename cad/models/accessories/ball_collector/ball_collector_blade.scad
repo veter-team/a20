@@ -2,6 +2,7 @@ use <../../BezierScad.scad>
 use <../../MCAD/regular_shapes.scad>
 use <../../MCAD/boxes.scad>
 use <../../base/shaft_coupling.scad>
+use <motor_box.scad>
 include <../../main_dimensions.scad>
 
 
@@ -255,6 +256,11 @@ module ball_collector_blade()
             rotate([0, 90, 0])
             cylinder(r = shaft_radius, h = blade_w + 10, center = true, $fn = 64);
         }
+
+        // Material save hole
+        translate([0, 30, -60])
+        rotate([0, 90, 0])
+        cylinder(r = 20, h = blade_w + 10, center = true, $fn = 64);
     }
 }
 
