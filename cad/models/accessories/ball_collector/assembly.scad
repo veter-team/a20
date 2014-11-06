@@ -19,15 +19,10 @@ module motor_positioned(for_mounting_holes)
     motor_box(for_mounting_holes, angle);
 }
 
-difference()
-{
-    ball_collector_blade();
+ball_collector_blade();
 
-    translate([0, 0, 0])
-    motor_positioned(true);
-}
 motor_positioned(false);
-
+/*
 translate([-blade_w / 2 - 4, 0, 0])
 rotate([0, -90, 0])
 cone_gear();
@@ -36,7 +31,6 @@ rotate([20, 0, 0])
 translate([-blade_w / 2 - motor_shift_x, motor_shift_y - 10, 0])
 rotate([90, 0, 0])
 %cone_gear();
-
 
 // Tennis ball
 translate([0, 0, -rotor_r - ball_r])
@@ -50,3 +44,4 @@ cylinder(r = shaft_radius, h = blade_w + 2 * 10, center = true);
 // Rotor
 rotate([0, 90, 0])
 %cylinder(r = rotor_r, h = blade_w - 2 * 10, center = true);
+*/

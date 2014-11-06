@@ -209,6 +209,55 @@ module bearing_mounting()
 }
 
 
+module bearing_cover(for_holes)
+{
+    k = 2;
+    th = 2;
+
+    difference()
+    {
+        hull()
+        {
+            rotate([0, -90, 0])
+            cylinder(r = radial_bearing_r * k, th, $fn = 128);
+            
+            translate([0, 0, -20])
+            rotate([0, -90, 0])
+            cylinder(r = radial_bearing_r * k, th, $fn = 128);
+        }
+
+        translate([-th - 0.1, 0, radial_bearing_r + (radial_bearing_r * k - radial_bearing_r) / 2])
+        rotate([0, 90, 0])
+        mounting_hole(th * 2, true, $fn = 64);
+
+        translate([-th - 0.1, 0, -radial_bearing_r - (radial_bearing_r * k - radial_bearing_r) / 2 - 20])
+        rotate([0, 90, 0])
+        mounting_hole(th * 2, true, $fn = 64);
+
+        hull()
+        {
+            rotate([0, -90, 0])
+            cylinder(r = shaft_radius, th * 4, center = true, $fn = 128);
+
+            translate([0, 0, -20])
+            rotate([0, -90, 0])
+            cylinder(r = shaft_radius, th * 4, center = true, $fn = 128);
+        }
+    }
+    
+    if(for_holes == true)
+    {
+        translate([-th - 0.1, 0, radial_bearing_r + (radial_bearing_r * k - radial_bearing_r) / 2])
+        rotate([0, 90, 0])
+        mounting_hole(th * 10, false, $fn = 64);
+
+        translate([-th - 0.1, 0, -radial_bearing_r - (radial_bearing_r * k - radial_bearing_r) / 2 - 20])
+        rotate([0, 90, 0])
+        mounting_hole(th * 10, false, $fn = 64);
+    }
+}
+
+
 module ball_collector_blade()
 {
     difference()
@@ -257,10 +306,49 @@ module ball_collector_blade()
             cylinder(r = shaft_radius, h = blade_w + 10, center = true, $fn = 64);
         }
 
-        // Material save hole
+        // Material save bottom hole
         translate([0, 30, -60])
         rotate([0, 90, 0])
         cylinder(r = 20, h = blade_w + 10, center = true, $fn = 64);
+
+        // Material save middle hole
+        translate([0, 60, -10])
+        rotate([0, 90, 0])
+        cylinder(r = 20, h = blade_w + 10, $fn = 64);
+
+        // Material save top hole
+        translate([0, 110, 40])
+        rotate([0, 90, 0])
+        cylinder(r = 20, h = blade_w + 10, $fn = 64);
+
+        // Motor mounting holes
+        translate([0, 0, 0])
+        {
+            translate([-blade_w / 2 + 2, 25.95, 14])
+            rotate([0, 90, 0])
+            roundedBox([20, 3 + tolerance, 20], 1.5, true, $fn = 64);
+
+            translate([-blade_w / 2 + 2, 38.98, -21.85])
+            rotate([0, 90, 0])
+            roundedBox([20, 3 + tolerance, 20], 1.5, true, $fn = 64);
+        }
+        translate([0, 67.65, 24.6])
+        {
+            translate([-blade_w / 2 + 2, 25.95, 14])
+            rotate([0, 90, 0])
+            roundedBox([20, 3 + tolerance, 20], 1.5, true, $fn = 64);
+
+            translate([-blade_w / 2 + 2, 38.98, -21.85])
+            rotate([0, 90, 0])
+            roundedBox([20, 3 + tolerance, 20], 1.5, true, $fn = 64);
+        }
+
+        translate([blade_w / 2 - 10, 0, 0])
+        bearing_cover(true);
+
+        translate([-blade_w / 2 + 10, 0, 0])
+        rotate([0, 0, 180])
+        bearing_cover(true);
     }
 }
 
@@ -272,4 +360,10 @@ if(ASSEMBLY == undef || ASSEMBLY == 0)
     //shaft_coupling();
 
     ball_collector_blade();
+
+    translate([blade_w / 2 - 20, 0, 0])
+    bearing_cover();
+
+    translate([-blade_w / 2 + 20, 0, 0])
+    bearing_cover();
 }
