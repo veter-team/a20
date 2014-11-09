@@ -104,10 +104,11 @@ module motor_box_base(for_mounting_holes)
             roundedBox([tube_len - 20, 10, 2 * motor_holder_y_dim], 4, true, $fn = 32);
             
         }
-
+/*
         translate([1.5 * motor_holder_h, 0, 25.0])
         rotate([0, -90, 0])
         motor();
+*/        
     }
 }
 
@@ -130,5 +131,6 @@ module motor_box(for_mounting_holes, angle)
 
 if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
+    rotate([0, -90, 0])
     motor_box(false);
 }
