@@ -353,6 +353,28 @@ module ball_collector_blade()
 }
 
 
+module bearing_stopper(length)
+{
+    scale([0.9, 0.9, 1.0])
+    difference()
+    {
+        hull()
+        {
+            cylinder(r = radial_bearing_r, h = radial_bearing_h, $fn = 128);
+
+            translate([length, 0, 0])
+            cylinder(r = radial_bearing_r, h = radial_bearing_h, $fn = 128);
+        }
+
+        translate([0, 0, -0.1])
+        cylinder(r = radial_bearing_r + 0.1, h = radial_bearing_h + 0.3, $fn = 128);
+
+        translate([0, -radial_bearing_r - 0.1, -0.1])
+        cube([4, 2 * radial_bearing_r + 0.3, radial_bearing_h + 0.3]);
+    }
+}
+
+
 if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
     //translate([27, 0, 0])
@@ -366,4 +388,6 @@ if(ASSEMBLY == undef || ASSEMBLY == 0)
 
     translate([-blade_w / 2 + 20, 0, 0])
     bearing_cover();
+
+    bearing_stopper(20);
 }
