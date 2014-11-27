@@ -355,6 +355,8 @@ module ball_collector_blade()
 
 module bearing_stopper(length)
 {
+    tolerated_length = length - tolerance;
+    
     scale([0.9, 0.9, 1.0])
     difference()
     {
@@ -362,7 +364,7 @@ module bearing_stopper(length)
         {
             cylinder(r = radial_bearing_r, h = radial_bearing_h, $fn = 128);
 
-            translate([length, 0, 0])
+            translate([tolerated_length, 0, 0])
             cylinder(r = radial_bearing_r, h = radial_bearing_h, $fn = 128);
         }
 
@@ -388,6 +390,4 @@ if(ASSEMBLY == undef || ASSEMBLY == 0)
 
     translate([-blade_w / 2 + 20, 0, 0])
     bearing_cover();
-
-    bearing_stopper(20);
 }
