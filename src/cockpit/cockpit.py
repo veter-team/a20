@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import pygame
 from pygame.locals import *
@@ -26,9 +26,10 @@ def load_components(display_surf, window_dim):
 def main():
     pygame.init()
 
-    # infoObject = pygame.display.Info()
-    # window_dim = (int(infoObject.current_w / 5 * 4),
-    #               int(infoObject.current_h / 5 * 4))
+    # Adjust window size depending on screen resolution
+    #infoObject = pygame.display.Info()
+    #window_dim = (int(infoObject.current_w / 5 * 4),
+    #              int(infoObject.current_h / 5 * 4))
 
     main_clock = pygame.time.Clock()
     display_surf = pygame.display.set_mode(window_dim)
@@ -44,20 +45,22 @@ def main_loop(component_list, display_surf, main_clock):
     
     while True: # main game loop
         new_events = pygame.event.get() # Retrieve new events
+                    
+        display_surf.fill((0, 0, 0)) # black background
+
+        # Let each component update visual representation
+        for c in component_list:
+            c.process_events(new_events)
+            c.update_visuals()
+        
+        pygame.display.update()
         
         # Check if we should quit
         for event in new_events:
             if event.type == QUIT:
                 pygame.quit()
                 return 0
-            
-        display_surf.fill((0, 0, 0)) # black background
 
-        # Let each component update visual representation
-        for c in component_list:
-            c.update_visuals()
-        
-        pygame.display.update()
         main_clock.tick(FPS)
 
 
