@@ -105,7 +105,8 @@ class LocomotionServer(Ice.Application):
                         syslog.seek(where)
                     else:
                         frame = Sensor.Frame(txtvals = {})
-                        frame.txtvals[Sensor.text] = [line]
+                        # Strip newline symbol
+                        frame.txtvals[Sensor.text] = [line[:-1]]
                         observer.newData(frame)
                 
         except EnvironmentError as (errno, errorstring):
