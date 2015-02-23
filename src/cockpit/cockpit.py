@@ -2,10 +2,6 @@
 
 import pygame
 from pygame.locals import *
-import sys, traceback, Ice
-Ice.loadSlice('--all -I' + Ice.getSliceDir() + ' -I../interfaces/' + ' ../interfaces/motorcontrol.ice')
-Ice.updateModules()
-import MotorControl
 
 
 FPS = 30 # frames per second to update the screen
@@ -17,7 +13,7 @@ def load_components(display_surf, window_dim):
     component_list = []
 
     import motorcontrol
-    viewport = pygame.Rect(0, 0, window_w / 5, window_h / 4))
+    viewport = pygame.Rect(0, 0, window_w / 5, window_h / 4)
     component_list.append(motorcontrol.MotorControl(display_surf, viewport))
 
     import logview

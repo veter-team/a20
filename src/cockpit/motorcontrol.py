@@ -3,6 +3,13 @@
 import pygame
 from pygame.locals import *
 
+import sys, traceback, Ice
+Ice.loadSlice('--all -I' + Ice.getSliceDir() + ' -I../interfaces/' + ' ../interfaces/motorcontrol.ice')
+Ice.loadSlice('--all -I' + Ice.getSliceDir() + ' -I../interfaces/' + ' ../interfaces/sensor.ice')
+Ice.updateModules()
+import MotorControl
+import Sensor
+
 from baseview import BaseView
 
 
