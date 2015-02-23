@@ -14,7 +14,7 @@ class LogView(BaseView):
     font_size = 10
     font_color = (0, 255, 0)
     border_width = 1 # 0 - no border
-    border_color = (0, 0, 64) # dark blue
+    border_color = (0, 0, 255) # blue
     x_offset = 5
     y_offset = 3
     
@@ -28,11 +28,12 @@ class LogView(BaseView):
         self.text_buf.append('Log output')
 
         # Determine font height
-        text_surf = self.font.render('Log', True, (0, 255, 0))
-        text_rect = text_surf.get_rect()
-        self.line_height = text_rect.height + 2
+        self.caption_surf = self.font.render('Log from remote vehicle', True, (255, 255, 0))
+        self.caption_rect = self.caption_surf.get_rect()
+        self.caption_rect.move_ip(viewport.left + self.x_offset, viewport.top + self.border_width + self.y_offset)
+        self.line_height = self.caption_rect.height + 2
         self.max_line_cnt = int(
-            (viewport.height - self.border_width * 2 - self.y_offset)
+            (viewport.height - self.border_width * 2 - self.y_offset - self.caption_rect.height - 3)
             / self.line_height)
         
         self.syslog = open('/var/log/syslog', mode='r')
@@ -46,6 +47,8 @@ class LogView(BaseView):
                              self.viewport,
                              self.border_width)
 
+        self.display_surf.blit(self.caption_surf, self.caption_rect)
+
         if self.syslog is None:
             return
         
@@ -58,7 +61,7 @@ class LogView(BaseView):
             if len(self.text_buf) > self.max_line_cnt:
                 self.text_buf.popleft()
 
-        y = self.y_offset + self.viewport.top
+        y = self.y_offset + self.caption_rect.bottom
         for s in self.text_buf:
             text_surf = self.font.render(s, True, self.font_color)
             text_rect = text_surf.get_rect()
