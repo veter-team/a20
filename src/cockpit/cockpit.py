@@ -12,9 +12,9 @@ def load_components(display_surf, window_dim):
     window_w, window_h = window_dim
     component_list = []
 
-    import motorcontrol
+    import motorctl
     viewport = pygame.Rect(0, 0, window_w / 5, window_h / 4)
-    component_list.append(motorcontrol.MotorControl(display_surf, viewport))
+    component_list.append(motorctl.MotorControl(display_surf, viewport))
 
     import logview
     viewport = pygame.Rect((0, window_h / 3 * 2, window_w, window_h / 3))
