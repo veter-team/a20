@@ -20,6 +20,10 @@ def load_components(display_surf, window_dim):
     viewport = pygame.Rect((0, window_h / 3 * 2, window_w, window_h / 3))
     component_list.append(logview.LogView(display_surf, viewport))
 
+    import compass
+    viewport = pygame.Rect(window_w / 5, 0, window_w / 5, window_h / 4)
+    component_list.append(compass.Compass(display_surf, viewport))
+
     return component_list
 
 
