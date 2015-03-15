@@ -12,7 +12,7 @@ module wheel_holder_shaft_hole()
 }
 
 
-module mounting_pad()
+module mounting_pad(for_holes)
 {
     mounting_pad_y_size = 16;
     mounting_pad_z_size = 7;
@@ -20,19 +20,29 @@ module mounting_pad()
     translate([60,
             -mounting_pad_y_size / 2 + front_pannel_h / 2,
             (wheel_holder_z_dim + (shaft_radius + 2) + 8)/2 - mounting_pad_z_size / 2])
-    difference()
     {
-        roundedBox([15, mounting_pad_y_size, mounting_pad_z_size],
-            1, false, $fn = 16);
-        translate([0,
-                -mounting_pad_y_size / 2 + front_pannel_h / 2 + 3,
-                -(mounting_pad_z_size + 0.1) / 2])
-        mounting_hole(mounting_pad_z_size + 0.2, false, $fn = 32);
+        difference()
+        {
+            roundedBox([15, mounting_pad_y_size, mounting_pad_z_size],
+                1, false, $fn = 16);
+            translate([0,
+                    -mounting_pad_y_size / 2 + front_pannel_h / 2 + 3,
+                    -(mounting_pad_z_size + 0.1) / 2])
+            mounting_hole(mounting_pad_z_size * 2, false, $fn = 32);
+        }
+
+        if(for_holes)
+        {
+            translate([0,
+                    -mounting_pad_y_size / 2 + front_pannel_h / 2 + 3,
+                    -(mounting_pad_z_size + 0.1) / 2])
+            mounting_hole(mounting_pad_z_size * 2, false, $fn = 32);
+        }
     }
 }
     
 
-module front_pannel()
+module front_pannel(for_holes)
 {
 
     difference()
@@ -42,18 +52,18 @@ module front_pannel()
             // Base
             roundedBox([base_x_size,
                     front_pannel_h,
-                    wheel_holder_z_dim + (shaft_radius + 2) + 8],
+                    front_pannel_z_dim],
                 1, false, $fn = 16);
 
             // Mounting pads
-            mounting_pad();
+            mounting_pad(for_holes);
             mirror([1, 0, 0])
-            mounting_pad();
+            mounting_pad(for_holes);
             mirror([0, 0, 1])
             {
-                mounting_pad();
+                mounting_pad(for_holes);
                 mirror([1, 0, 0])
-                mounting_pad();
+                mounting_pad(for_holes);
             }
         }
 
@@ -81,7 +91,7 @@ if(ASSEMBLY == undef || ASSEMBLY == 0)
         {
             difference()
             {
-                front_pannel();
+                front_pannel(false);
                 
                 // Holes for motor holder
                 translate([-(base_x_size / 2 - wheel_holder_y_dim - shaft_coupling_l - 10),

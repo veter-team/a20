@@ -1,5 +1,6 @@
 use <../MCAD/boxes.scad>
 use <lead_battery.scad>
+use <front_pannel.scad>
 include <../main_dimensions.scad>
 
 
@@ -26,11 +27,36 @@ module base2(show_max_dimensions = false)
         translate([0, 0, -(wheel_holder_z_dim + 2 + 2)])
         scale([1.02, 1.04, 1.0])
         lead_battery();
+
+        // holes for wires
+        translate([base_x_size / 2 - 20, 0, 0])
+        cube([4, 17, 10], center = true);
+        
+        translate([-(base_x_size / 2 - 20), 0, 0])
+        cube([4, 17, 10], center = true);
     }
 }
 
 
 if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
-    base2();
+    // Uncomment for 2D projection.
+    // Useful for DXF export.
+    //projection(cut = false)
+    difference()
+    {
+        base2();
+        translate([0,
+                base_y_size / 2 - front_pannel_h / 2,
+                -front_pannel_z_dim / 2 - base_z_size / 2])
+        front_pannel(true);
+
+        mirror([0, 1, 0])
+        {
+            translate([0,
+                    base_y_size / 2 - front_pannel_h / 2,
+                    -front_pannel_z_dim / 2 - base_z_size / 2])
+            front_pannel(true);
+        }
+    }
 }

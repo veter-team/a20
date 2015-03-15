@@ -68,6 +68,7 @@ wheel_holder_y_dim = belt_gear_l + 1 * 2 + radial_bearing_h * 2 + 2 * 2;
 wheel_holder_z_dim = 38;
 
 front_pannel_h = 5;
+front_pannel_z_dim = wheel_holder_z_dim + (shaft_radius + 2) + 8;
 
 akku_x_dim = 134;
 akku_y_dim = 67;
