@@ -74,6 +74,9 @@ akku_x_dim = 134;
 akku_y_dim = 67;
 akku_z_dim = 61;
 
+akku_belt_hole_w = 22;
+base_bottom_battery_holder_dim = [akku_x_dim - 2 * 20, 10, 15];
+
 //base_x_size = allowed_x_size - wheel_width * 2 - 60;
 base_x_size = akku_x_dim + 2 * wheel_holder_y_dim + 6;
 base_y_size = ((330.5 - 2 * 3.1415 * belt_gear_r2) / 2 / 2 + shaft_shift) * 2 + front_pannel_h * 2;

@@ -34,6 +34,19 @@ module base2(show_max_dimensions = false)
         
         translate([-(base_x_size / 2 - 20), 0, 0])
         cube([4, 17, 10], center = true);
+
+        // Akku holder belt pockets
+        translate([base_bottom_battery_holder_dim[0] / 4, akku_y_dim / 2, 0])
+        cube([akku_belt_hole_w, 10, 10], center = true);
+
+        translate([-base_bottom_battery_holder_dim[0] / 4, akku_y_dim / 2, 0])
+        cube([akku_belt_hole_w, 10, 10], center = true);
+
+        translate([base_bottom_battery_holder_dim[0] / 4, -akku_y_dim / 2, 0])
+        cube([akku_belt_hole_w, 10, 10], center = true);
+
+        translate([-base_bottom_battery_holder_dim[0] / 4, -akku_y_dim / 2, 0])
+        cube([akku_belt_hole_w, 10, 10], center = true);
     }
 }
 
