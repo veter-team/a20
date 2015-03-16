@@ -67,10 +67,11 @@ class LocomotionServer(Ice.Application):
             logger.trace('Info', '{0} - initialized'.format(diff_steering.getInfo()))
             self.communicator().waitForShutdown()
 
-        except EnvironmentError as (errno, errorstring):
+        except EnvironmentError as errinfo:
+            errno, errorstring = err_info
             logger.error('Error {0}: {1}'.format(errno, errorstring))
         except Ice.Exception as ex:
-            logger.error(ex)
+            logger.error(str(ex))
 
         logger.trace('Info', 'Shutting down...')
         return 0

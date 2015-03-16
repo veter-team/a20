@@ -27,7 +27,7 @@ sensor_type = {
     Sensor.positionx : 'POSITIONX',
     Sensor.positiony : 'POSITIONY',
     Sensor.positionz : 'POSITIONZ',
-    Sensor.brightness : 'BRIGHTNESS'
+    Sensor.brightness : 'BRIGHTNESS',
     Sensor.video : 'VIDEO'
 }
 
