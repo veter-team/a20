@@ -7,6 +7,8 @@ from collections import deque
 
 from baseview import BaseView
 
+import Sensor
+
 
 class LogView(BaseView):
     "Display log output in scrolling window"
@@ -25,7 +27,6 @@ class LogView(BaseView):
         self.viewport = viewport
         self.font = pygame.font.Font('vera.ttf', self.font_size)
         self.text_buf = deque()
-        self.text_buf.append('Log output')
 
         # Determine font height
         self.caption_surf = self.font.render('Log from remote vehicle', True, (255, 255, 0))
@@ -36,8 +37,6 @@ class LogView(BaseView):
             (viewport.height - self.border_width * 2 - self.y_offset - self.caption_rect.height - 3)
             / self.line_height)
         
-        self.syslog = open('/var/log/syslog', mode='r')
-        self.where = self.syslog.tell()
     
     def update_visuals(self):
         # Outer rectangle
@@ -48,18 +47,6 @@ class LogView(BaseView):
                              self.border_width)
 
         self.display_surf.blit(self.caption_surf, self.caption_rect)
-
-        if self.syslog is None:
-            return
-        
-        where = self.syslog.tell()
-        line = self.syslog.readline()
-        if not line:
-            self.syslog.seek(where)
-        else:
-            self.text_buf.append(line[:-1])
-            if len(self.text_buf) > self.max_line_cnt:
-                self.text_buf.popleft()
 
         y = self.y_offset + self.caption_rect.bottom
         for s in self.text_buf:
@@ -75,6 +62,16 @@ class LogView(BaseView):
     def process_events(self, new_events):
         for event in new_events:
             if event.type == QUIT:
-                self.syslog.close()
-                self.syslog = None
+                pass
             
+
+    def get_supported_sensor_types(self):
+        return [Sensor.text]
+
+
+    def new_data(self, data_type, data):
+        for log_str in data:
+            #print(log_str)
+            self.text_buf.append(log_str)
+            if len(self.text_buf) > self.max_line_cnt:
+                self.text_buf.popleft()

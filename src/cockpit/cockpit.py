@@ -6,6 +6,7 @@ from pygame.locals import *
 
 import Ice, IceStorm
 
+Ice.loadSlice('--all -I' + Ice.getSliceDir() + ' -I../interfaces/' + ' ../interfaces/motorcontrol.ice')
 Ice.loadSlice('--all -I' + Ice.getSliceDir() + ' -I../interfaces/' + ' ../interfaces/sensor.ice')
 Ice.updateModules()
 import Sensor
@@ -14,37 +15,43 @@ FPS = 30 # frames per second to update the screen
 window_dim = (1024, 768) # default width and height of the program's window
 
 # Known sensor names
-sensor_type = {
-    Sensor.text : 'TEXT',
-    Sensor.range : 'RANGE',
-    Sensor.bearing : 'BEARING',
-    Sensor.altitude : 'ALTITUDE',
-    Sensor.longitude : 'LONGITUDE',
-    Sensor.lattitude : 'LATTITUDE',
-    Sensor.temperature : 'TEMPERATURE',
-    Sensor.pressure : 'PRESURE',
-    Sensor.roll : 'ROLL',
-    Sensor.pitch : 'PITCH',
-    Sensor.yaw : 'YAW',
-    Sensor.speed : 'SPEED',
-    Sensor.accelx : 'ACCELX',
-    Sensor.accely : 'ACCELY',
-    Sensor.accelz : 'ACCELZ',
-    Sensor.positionx : 'POSITIONX',
-    Sensor.positiony : 'POSITIONY',
-    Sensor.positionz : 'POSITIONZ',
-    Sensor.brightness : 'BRIGHTNESS',
-    Sensor.video : 'VIDEO'
-}
+#sensor_type = {
+#    Sensor.text : 'TEXT',
+#    Sensor.range : 'RANGE',
+#    Sensor.bearing : 'BEARING',
+#    Sensor.altitude : 'ALTITUDE',
+#    Sensor.longitude : 'LONGITUDE',
+#    Sensor.lattitude : 'LATTITUDE',
+#    Sensor.temperature : 'TEMPERATURE',
+#    Sensor.pressure : 'PRESURE',
+#    Sensor.roll : 'ROLL',
+#    Sensor.pitch : 'PITCH',
+#    Sensor.yaw : 'YAW',
+#    Sensor.speed : 'SPEED',
+#    Sensor.accelx : 'ACCELX',
+#    Sensor.accely : 'ACCELY',
+#    Sensor.accelz : 'ACCELZ',
+#    Sensor.positionx : 'POSITIONX',
+#    Sensor.positiony : 'POSITIONY',
+#    Sensor.positionz : 'POSITIONZ',
+#    Sensor.brightness : 'BRIGHTNESS',
+#    Sensor.video : 'VIDEO'
+#}
 
 
 class SensorObserverI(Sensor.SensorObserver):
+
+    def __init__(self, observer_interest_dict):
+        self.observer_interest_dict = observer_interest_dict
+
 
     def newData(self, data, current = None):
         possible_vals = [data.txtvals, data.floatvals, data.intvals]
         for val in possible_vals:
             for k, v in val.items():
-                print('{0}: {1}'.format(sensor_type[k], ' '.join(v)))
+                #print('{0}: {1}'.format(sensor_type[k], ' '.join(v)))
+                for view in self.observer_interest_dict[k]:
+                    view.new_data(k, v)
 
 
 class Subscriber(Ice.Application):
@@ -85,12 +92,23 @@ class Subscriber(Ice.Application):
 
         adapter = self.communicator().createObjectAdapter("Syslog.Subscriber")
 
+        observer_interest_dict = {}
+        for c in self.component_list:
+            interest_list = c.get_supported_sensor_types()
+            for interest in interest_list:
+                if interest in observer_interest_dict:
+                    observer_interest_dict[t].append(c)
+                else:
+                    observer_interest_dict[interest] = [c]
+
+        sensor_observer = SensorObserverI(observer_interest_dict)
+
         # Add a servant for the Ice object.
         # Id is not directly altered since it is used below to detect
         # whether subscribeAndGetPublisher can raise AlreadySubscribed.
         subId = Ice.Identity()
         subId.name = Ice.generateUUID()
-        subscriber = adapter.add(SensorObserverI(), subId)
+        subscriber = adapter.add(sensor_observer, subId)
 
         # Activate the object adapter before subscribing.
         adapter.activate()
@@ -127,10 +145,10 @@ class Subscriber(Ice.Application):
         while True: # main game loop
             new_events = pygame.event.get() # Retrieve new events
                     
-            display_surf.fill((0, 0, 0)) # black background
+            self.display_surf.fill((0, 0, 0)) # black background
 
             # Let each component update visual representation
-            for c in component_list:
+            for c in self.component_list:
                 c.process_events(new_events)
                 c.update_visuals()
         
@@ -142,7 +160,7 @@ class Subscriber(Ice.Application):
                     pygame.quit()
                     return 0
 
-            main_clock.tick(FPS)
+            self.main_clock.tick(FPS)
 
         # Unsubscribe all subscribed objects.
         topic.unsubscribe(subscriber)

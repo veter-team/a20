@@ -7,6 +7,8 @@ from collections import deque
 
 from baseview import BaseView
 
+import Sensor
+
 
 class Compass(BaseView):
     "Display log output in scrolling window"
@@ -94,3 +96,7 @@ class Compass(BaseView):
                 pygame.draw.line(self.display_surf,
                                  self.color,
                                  line_begin, line_end)
+
+
+    def get_supported_sensor_types(self):
+        return [Sensor.bearing]

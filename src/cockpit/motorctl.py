@@ -4,9 +4,6 @@ import pygame
 from pygame.locals import *
 
 import sys, traceback, Ice
-Ice.loadSlice('--all -I' + Ice.getSliceDir() + ' -I../interfaces/' + ' ../interfaces/motorcontrol.ice')
-Ice.loadSlice('--all -I' + Ice.getSliceDir() + ' -I../interfaces/' + ' ../interfaces/sensor.ice')
-Ice.updateModules()
 import MotorControl
 import Sensor
 
@@ -159,3 +156,7 @@ Send motor control commands."
                     self.direction_ctl = self.NEUTRAL
                 elif event.key == K_UP or event.key == K_w or event.key == K_DOWN or event.key == K_s:
                     self.speed_ctl = self.NEUTRAL
+
+
+    def get_supported_sensor_types(self):
+        return [Sensor.speed, Sensor.accelx, Sensor.accely]
