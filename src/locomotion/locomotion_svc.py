@@ -68,7 +68,7 @@ class LocomotionServer(Ice.Application):
             self.communicator().waitForShutdown()
 
         except EnvironmentError as errinfo:
-            errno, errorstring = err_info
+            errno, errorstring = errinfo
             logger.error('Error {0}: {1}'.format(errno, errorstring))
         except Ice.Exception as ex:
             logger.error(str(ex))
