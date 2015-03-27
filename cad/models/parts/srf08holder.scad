@@ -13,10 +13,10 @@ board_x_dim = 43.18;
 board_y_dim = mount_hole_y_dist + 5.08;
 board_z_dim = 1.524;
 
-reflector_r = 16.256 / 2;
+reflector_r = (16.256 + tolerance) / 2;
 reflector_h = 14.224 - board_z_dim;
 
-light_sensor_r = 4.572 / 2;
+light_sensor_r = (4.572 + tolerance) / 2;
 
 electronic_height = 2;
 
@@ -27,7 +27,7 @@ module srf08()
     cube([board_x_dim, board_y_dim, board_z_dim], center = true);
 
     // Reflectors
-    translate([-12, 0, 0])
+    translate([-11, 0, 0])
     cylinder(r = reflector_r, h = reflector_h, $fn = 128);
     translate([11, 0, 0])
     cylinder(r = reflector_r, h = reflector_h, $fn = 128);
@@ -97,6 +97,7 @@ module srf08holder(show_sonar = false)
 
 if(ASSEMBLY == undef || ASSEMBLY == 0)
 {
+    translate([0, 0, 3 / 2])
     srf08holder();
     //srf08();
     //holder_base();
