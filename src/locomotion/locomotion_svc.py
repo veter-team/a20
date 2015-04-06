@@ -18,6 +18,13 @@ class DifferentialSteeringI(MotorControl.DifferentialSteering):
         self.bus = bus
         self.address = addr
         self.operation_mode = 0 # default mode
+        self.stopRotation()
+
+
+    def stopRotation(self):
+        self.setOperationMode(4)
+        self.bus.write_byte_data(self.address, 1, 128)
+        self.bus.write_byte_data(self.address, 2, 128)
         
 
     def setOperationMode(self, mode):
@@ -55,12 +62,12 @@ class LocomotionServer(Ice.Application):
             return 1
 
         logger = self.communicator().getLogger()
+        bus = smbus.SMBus(1)
+        diff_steering = DifferentialSteeringI(logger, bus, 0xB0 >> 1)
 
         try:
 
             adapter = self.communicator().createObjectAdapter('locomotion')
-            bus = smbus.SMBus(0)
-            diff_steering = DifferentialSteeringI(logger, bus, 0xB0)
             adapter.add(diff_steering, 
                         self.communicator().stringToIdentity('diffsteering'))
             adapter.activate()
@@ -69,9 +76,11 @@ class LocomotionServer(Ice.Application):
 
         except EnvironmentError as errinfo:
             errno, errorstring = errinfo
-            logger.error('Error {0}: {1}'.format(errno, errorstring))
+            logger.error('LocomotionServer.run() - error {0}: {1}'.format(errno, errorstring))
         except Ice.Exception as ex:
             logger.error(str(ex))
+
+        diff_steering.stopRotation()
 
         logger.trace('Info', 'Shutting down...')
         return 0

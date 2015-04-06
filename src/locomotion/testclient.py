@@ -25,16 +25,20 @@ class Client(Ice.Application):
 
         print('Enter speed and turn separated by space or empty string to exit')
         c = None
+
+        # stop
+        diffdrive.setMotorsWithTurn(128, 128)
+
         while c != '':
             try:
-                sys.stdout.write("$ ")
+                sys.stdout.write("rotation turn $ ")
                 sys.stdout.flush()
                 c = sys.stdin.readline().strip()
                 lst = map(int, c.split())
-                if c != '' and len(lst) != 2:
-                    print('Parsing error')
-                else:
+                if c != '' and len(lst) == 2:
                     diffdrive.setMotorsWithTurn(lst[0], lst[1])
+                else:
+                    print('Parsing error')
 
             except KeyboardInterrupt:
                 break
@@ -42,6 +46,9 @@ class Client(Ice.Application):
                 break
             except Ice.Exception as ex:
                 print(ex)
+
+        # stop
+        diffdrive.setMotorsWithTurn(128, 128)
 
         return 0
 
