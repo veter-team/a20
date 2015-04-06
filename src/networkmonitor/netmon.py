@@ -11,6 +11,16 @@ import dbus.mainloop.glib; dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 from gi.repository import GObject
 import NetworkManager
 import subprocess
+import RPi.GPIO as GPIO
+
+#GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
+
+#status_led = 35
+status_led = 19
+status_led_on = False
+status_led_off = not status_led_on
+GPIO.setup(status_led, GPIO.OUT)
 
 
 # List of programms to execute if/when network connection is changed
@@ -18,8 +28,13 @@ commands = ( ['restart', 'locomotion'],
 )
 
 
+def on_disconnected():
+    GPIO.output(status_led, status_led_off)
+
+
 # Starts processes after network connection changes
-def on_changed():
+def on_connect_global():
+    GPIO.output(status_led, status_led_on)
     for p in commands:
         try:
             proc = subprocess.Popen(p)
@@ -29,11 +44,11 @@ def on_changed():
 
 
 # State handlers table
-state_handlers = { NetworkManager.NM_STATE_DISCONNECTED : on_changed,
+state_handlers = { NetworkManager.NM_STATE_DISCONNECTED : on_disconnected,
                    NetworkManager.NM_STATE_DISCONNECTING : None,
                    NetworkManager.NM_STATE_ASLEEP : None,
                    NetworkManager.NM_STATE_CONNECTING : None,
-                   NetworkManager.NM_STATE_CONNECTED_GLOBAL : on_changed
+                   NetworkManager.NM_STATE_CONNECTED_GLOBAL : on_connect_global
 }
 
 
