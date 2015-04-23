@@ -64,8 +64,17 @@ Send motor control commands."
     def __init__(self, display_surf, viewport):
         super(MotorView, self).__init__()
 
-        self.motor_ctl = MotorClient('../config/cockpit.config')
-        self.send_ctl_vals = True
+        joystick_count = pygame.joystick.get_count()
+        if joystick_count > 0:
+            # use the first one
+            self.joystick = pygame.joystick.Joystick(0)
+        else:
+            self.joystick = None
+
+        self.joy_axis_scale = 256.0 / 65535
+
+        #self.motor_ctl = MotorClient('../config/cockpit.config')
+        self.send_ctl_vals = True # to reduce ctl vals update rate by 2
         
         self.display_surf = display_surf
         self.viewport = viewport
@@ -135,8 +144,8 @@ Send motor control commands."
         # network flooding
         if self.send_ctl_vals == True:
             #print(self.speed[0] + 128, self.turn_factor + 128)
-            self.motor_ctl.set_control_values(self.speed[0] + 128, 
-                                              self.turn_factor + 128)
+            #self.motor_ctl.set_control_values(self.speed[0] + 128, 
+            #                                  self.turn_factor + 128)
             self.send_ctl_vals = False
         else:
             self.send_ctl_vals = True
@@ -200,7 +209,27 @@ Send motor control commands."
                     self.direction_ctl = self.NEUTRAL
                 elif event.key == K_UP or event.key == K_w or event.key == K_DOWN or event.key == K_s:
                     self.speed_ctl = self.NEUTRAL
-
+            # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN JOYBUTTONUP JOYHATMOTION
+            # List of the event attributes defined with each event type:
+            # JOYAXISMOTION    joy, axis, value
+            # JOYBALLMOTION    joy, ball, rel
+            # JOYHATMOTION     joy, hat, value
+            # JOYBUTTONUP      joy, button
+            # JOYBUTTONDOWN    joy, button
+            elif event.type == pygame.JOYBUTTONDOWN:
+                #button = joystick.get_button(0)
+                print("Joystick button pressed.", joy, button)
+            elif event.type == pygame.JOYBUTTONUP:
+                #button = joystick.get_button(0)
+                print("Joystick button released.", joy, button)
+            elif event.type == pygame.JOYAXISMOTION:
+                #axis = joystick.get_axis(0)
+                print("Joystick button released.", joy, axis, value)
+                if axis == 0: # acceleration
+                    self.speed[0] = value * self.joy_axis_scale 
+                elif axis == 1: # turn factor
+                    self.turn_factor = value * self.joy_axis_scale 
+                    
 
     def get_supported_sensor_types(self):
         return [Sensor.speed, Sensor.accelx, Sensor.accely]

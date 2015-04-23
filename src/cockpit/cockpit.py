@@ -195,6 +195,7 @@ def load_components(display_surf, window_dim):
 
 def main():
     pygame.init()
+    pygame.joystick.init()
 
     # Adjust window size depending on screen resolution
     #infoObject = pygame.display.Info()
