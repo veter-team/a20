@@ -9,8 +9,39 @@ import Sensor
 
 from baseview import BaseView
 
+# Class responsible for communication with steering implementation
+class MotorClient:
 
-class MotorControl(BaseView):
+    def __init__(self, config_file_name):
+        # Load properties from configuration file
+        props = Ice.createProperties()
+        props.load(config_file_name)
+        id = Ice.InitializationData()
+        id.properties = props
+
+        # Create a communicator
+        self.ic = Ice.initialize(id)
+        # Create a proxy for motor control
+        obj = self.ic.propertyToProxy('diffsteering.Proxy').ice_twoway().ice_timeout(-1).ice_secure(False)
+        # Down-cast the proxy to a differential steering proxy
+        self.motor_ctl = MotorControl.DifferentialSteeringPrx.checkedCast(obj)
+        if not self.motor_ctl:
+            raise RuntimeError('invalid diff steering proxy')
+
+        # stop motors (just for the case)
+        self.motor_ctl.setMotorsWithTurn(128, 128)
+
+
+    # Speed should be between 0 and 255, where 128 is stop, 0 is 100%
+    # backward and 255 is 100% forward.
+    # Turn should be also between 0 and 255 where 128 is neutral
+    # position
+    def set_control_values(self, speed, turn):
+        self.motor_ctl.setMotorsWithTurn(speed, turn)
+
+
+# View implementation for motor control
+class MotorView(BaseView):
     "Display target and current wheel rotation speed. \
 Send motor control commands."
 
@@ -31,7 +62,10 @@ Send motor control commands."
 
     
     def __init__(self, display_surf, viewport):
-        super(MotorControl, self).__init__()
+        super(MotorView, self).__init__()
+
+        self.motor_ctl = MotorClient('../config/cockpit.config')
+        self.send_ctl_vals = True
         
         self.display_surf = display_surf
         self.viewport = viewport
@@ -96,6 +130,16 @@ Send motor control commands."
             self.turn_factor += self.inc_direction
             if self.turn_factor > self.turn_max:
                 self.turn_factor = self.turn_max
+
+        # Send control values update every second iteration to prevent
+        # network flooding
+        if self.send_ctl_vals == True:
+            #print(self.speed[0] + 128, self.turn_factor + 128)
+            self.motor_ctl.set_control_values(self.speed[0] + 128, 
+                                              self.turn_factor + 128)
+            self.send_ctl_vals = False
+        else:
+            self.send_ctl_vals = True
 
         # Update speed to achieve requested turn factor
         self.calculated_speed[0] = self.speed[0] - self.turn_factor

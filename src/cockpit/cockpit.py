@@ -143,24 +143,30 @@ class Subscriber(Ice.Application):
         self.shutdownOnInterrupt()
 
         while True: # main game loop
-            new_events = pygame.event.get() # Retrieve new events
+            try:
+
+                new_events = pygame.event.get() # Retrieve new events
                     
-            self.display_surf.fill((0, 0, 0)) # black background
+                self.display_surf.fill((0, 0, 0)) # black background
 
-            # Let each component update visual representation
-            for c in self.component_list:
-                c.process_events(new_events)
-                c.update_visuals()
+                # Let each component update visual representation
+                for c in self.component_list:
+                    c.process_events(new_events)
+                    c.update_visuals()
         
-            pygame.display.update()
+                pygame.display.update()
         
-            # Check if we should quit
-            for event in new_events:
-                if event.type == QUIT:
-                    pygame.quit()
-                    return 0
+                # Check if we should quit
+                for event in new_events:
+                    if event.type == QUIT:
+                        pygame.quit()
+                        return 0
 
-            self.main_clock.tick(FPS)
+                self.main_clock.tick(FPS)
+
+            except Ice.Exception as ex:
+                print(ex)
+                break
 
         # Unsubscribe all subscribed objects.
         topic.unsubscribe(subscriber)
@@ -174,7 +180,7 @@ def load_components(display_surf, window_dim):
 
     import motorctl
     viewport = pygame.Rect(0, 0, window_w / 5, window_h / 4)
-    component_list.append(motorctl.MotorControl(display_surf, viewport))
+    component_list.append(motorctl.MotorView(display_surf, viewport))
 
     import logview
     viewport = pygame.Rect((0, window_h / 3 * 2, window_w, window_h / 3))
