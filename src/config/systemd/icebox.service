@@ -1,0 +1,15 @@
+[Unit]
+Description=Container for ZeroC Ice services
+After=network.target auditd.service
+#ConditionPathExists=!/etc/ssh/sshd_not_to_be_run
+
+[Service]
+#EnvironmentFile=-/etc/default/ssh
+ExecStart=/usr/bin/icebox --Ice.Config=/etc/icebox.config
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+Alias=icebox.service
